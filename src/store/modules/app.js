@@ -10,7 +10,13 @@ const useAppStore = defineStore(
         hide: false
       },
       device: 'desktop',
-      size: Cookies.get('size') || 'default'
+      size: Cookies.get('size') || 'default',
+      deviceTypeENUM: {
+        10: "DTU设备",
+        20: "阀门",
+        30: "测温模板",
+        40: "压力传感器",
+      }
     }),
     actions: {
       toggleSideBar(withoutAnimation) {
