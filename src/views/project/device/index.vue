@@ -1,5 +1,5 @@
 <template>
-  <div class="app-container">
+  <div class="device-container">
     <el-form
       :model="queryParams"
       ref="queryRef"
@@ -52,37 +52,131 @@
         width="130"
       />
       <el-table-column label="小区名称" prop="communityName" width="150" />
-      <el-table-column
-        label="IP地址"
-        prop="ipAddress"
-        :show-overflow-tooltip="true"
-        width="150"
-      >
+      <el-table-column label="IP地址" prop="ipAddress" min-width="200">
         <template #default="{ row }">
-          <span>{{ row.ipAddress }}</span>
+          <div class="table-edit-wrapper">
+            <el-input v-model="row.ipAddress" />
+            <el-icon @click="onTableClick(row, 'ipAddress', 1, 'dataStr', 22)">
+              <edit color="#409EFF" />
+            </el-icon>
+            <el-icon @click="onTableClick(row, 'ipAddress', 0, '', 22)">
+              <refresh color="#409EFF" />
+            </el-icon>
+          </div>
         </template>
       </el-table-column>
-      <el-table-column
-        label="加密密钥"
-        prop="aesKey"
-        :show-overflow-tooltip="true"
-        width="130"
-      />
+      <el-table-column label="加密密钥" prop="aesKey" min-width="200">
+        <template #default="{ row }">
+          <div class="table-edit-wrapper">
+            <el-input v-model="row.aesKey" />
+            <el-icon @click="onTableClick(row, 'aesKey', 1, 'dataStr', 25)">
+              <edit color="#409EFF" />
+            </el-icon>
+            <el-icon @click="onTableClick(row, 'aesKey', 0, '', 25)">
+              <refresh color="#409EFF" />
+            </el-icon>
+          </div>
+        </template>
+      </el-table-column>
       <el-table-column
         label="鉴权密钥"
         align="loginKey"
         :show-overflow-tooltip="true"
-        width="130"
-      />
-      <el-table-column label="数据上报周期" prop="reportPeriod" width="130" />
-      <el-table-column label="数据采集间隔" prop="collectPeriod" width="130" />
-      <el-table-column label="阀门开度" prop="valvePosition" width="130" />
+        min-width="200"
+      >
+        <template #default="{ row }">
+          <div class="table-edit-wrapper">
+            <el-input v-model="row.loginKey" />
+            <el-icon @click="onTableClick(row, 'loginKey', 1, 'dataStr', 38)">
+              <edit color="#409EFF" />
+            </el-icon>
+            <el-icon @click="onTableClick(row, 'loginKey', 0, '', 38)">
+              <refresh color="#409EFF" />
+            </el-icon>
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column label="数据上报周期" prop="reportPeriod" min-width="200">
+        <template #default="{ row }">
+          <div class="table-edit-wrapper">
+            <el-input v-model="row.reportPeriod" />
+            <el-icon @click="onTableClick(row, 'reportPeriod', 1, 'data', 35)">
+              <edit color="#409EFF" />
+            </el-icon>
+            <el-icon @click="onTableClick(row, 'reportPeriod', 0, '', 35)">
+              <refresh color="#409EFF" />
+            </el-icon>
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column
+        label="数据采集间隔"
+        prop="collectPeriod"
+        min-width="200"
+      >
+        <template #default="{ row }">
+          <div class="table-edit-wrapper">
+            <el-input v-model="row.collectPeriod" />
+            <el-icon @click="onTableClick(row, 'collectPeriod', 1, 'data', 37)">
+              <edit color="#409EFF" />
+            </el-icon>
+            <el-icon @click="onTableClick(row, 'collectPeriod', 0, '', 37)">
+              <refresh color="#409EFF" />
+            </el-icon>
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column label="阀门开度" prop="valvePosition" min-width="200">
+        <template #default="{ row }">
+          <div class="table-edit-wrapper">
+            <el-input v-model="row.valvePosition" />
+            <el-icon @click="onTableClick(row, 'valvePosition', 1, 'data', 48)">
+              <edit color="#409EFF" />
+            </el-icon>
+            <el-icon @click="onTableClick(row, 'valvePosition', 0, '', 48)">
+              <refresh color="#409EFF" />
+            </el-icon>
+          </div>
+        </template>
+      </el-table-column>
       <el-table-column
         label="目标回水温度"
         prop="returnWaterTemperature"
-        width="130"
-      />
-      <el-table-column label="目标室温" prop="roomTemperature" width="130" />
+        min-width="200"
+      >
+        <template #default="{ row }">
+          <div class="table-edit-wrapper">
+            <el-input v-model="row.returnWaterTemperature" />
+            <el-icon
+              @click="
+                onTableClick(row, 'returnWaterTemperature', 1, 'data', 49)
+              "
+            >
+              <edit color="#409EFF" />
+            </el-icon>
+            <el-icon
+              @click="onTableClick(row, 'returnWaterTemperature', 0, '', 49)"
+            >
+              <refresh color="#409EFF" />
+            </el-icon>
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column label="目标室温" prop="roomTemperature" min-width="200">
+        <template #default="{ row }">
+          <div class="table-edit-wrapper">
+            <el-input v-model="row.roomTemperature" />
+            <el-icon
+              @click="onTableClick(row, 'roomTemperature', 1, 'data', 50)"
+            >
+              <edit color="#409EFF" />
+            </el-icon>
+            <el-icon @click="onTableClick(row, 'roomTemperature', 0, '', 50)">
+              <refresh color="#409EFF" />
+            </el-icon>
+          </div>
+        </template>
+      </el-table-column>
       <el-table-column label="创建时间" prop="createTime" width="160" />
       <el-table-column label="更新时间" prop="updateTime" width="160" />
       <el-table-column
@@ -181,6 +275,7 @@ import {
   deleteMethod,
   addMethod,
   editMethod,
+  editOtherInfoMethod,
 } from "@/api/project/device";
 import { getCommunityList } from "@/api/home";
 import { watch } from "vue";
@@ -267,7 +362,7 @@ function handleUpdate(row) {
   form.value = {
     id: row.id,
     deviceSn: row.deviceSn,
-    deviceType: row.deviceType + '',
+    deviceType: row.deviceType + "",
     dtuSn: row.dtuSn || "",
     communityId: row.communityId,
     communityName: row.communityName,
@@ -333,8 +428,41 @@ const getCommunityLists = async () => {
   commuityList.value = res.records;
 };
 
+const onTableClick = async (row, key, readWriteFlag, params, cmdcode) => {
+  if (!row[key]) {
+    return proxy.$modal.msgWarning("请输入值再操作！");
+  }
+  const postValue = {
+    deviceSn: row.deviceSn,
+    cmdcode,
+    readWriteFlag,
+    [key]: row[key],
+  };
+  if (readWriteFlag === 1) {
+    postValue[params] = row[key];
+  }
+  const res = await editOtherInfoMethod(postValue);
+  if (res.code === 200) {
+    proxy.$modal.msgSuccess("操作成功");
+    readWriteFlag === 1 && getList();
+  }
+};
+
 onMounted(() => {
   getList();
   getCommunityLists();
 });
 </script>
+<style lang="scss" scoped>
+.device-container {
+  .table-edit-wrapper {
+    display: flex;
+    align-items: center;
+
+    .el-icon {
+      margin-left: 6px;
+      cursor: pointer;
+    }
+  }
+}
+</style>

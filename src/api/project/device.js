@@ -35,3 +35,12 @@ export function deleteMethod(data) {
     data,
   });
 }
+
+// 修改其他信息
+export function editOtherInfoMethod(data) {
+  return request({
+    url: "/biz/device/public-msg",
+    method: "post",
+    data,
+  });
+}
