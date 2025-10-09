@@ -455,6 +455,8 @@ onMounted(() => {
 </script>
 <style lang="scss" scoped>
 .device-container {
+  padding: 20px;
+
   .table-edit-wrapper {
     display: flex;
     align-items: center;

@@ -1,5 +1,5 @@
 <template>
-  <div class="community-container">
+  <div class="community-container" style="padding: 20px">
     <el-form
       :model="queryParams"
       ref="queryRef"
