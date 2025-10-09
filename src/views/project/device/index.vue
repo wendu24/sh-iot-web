@@ -57,7 +57,11 @@
         prop="ipAddress"
         :show-overflow-tooltip="true"
         width="150"
-      />
+      >
+        <template #default="{ row }">
+          <span>{{ row.ipAddress }}</span>
+        </template>
+      </el-table-column>
       <el-table-column
         label="加密密钥"
         prop="aesKey"

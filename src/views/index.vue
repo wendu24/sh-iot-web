@@ -344,7 +344,7 @@ const getScatterData = async () => {
     },
     series: [
       {
-        symbolSize: 20,
+        symbolSize: 10,
         data: res.data.map((item) => [
           item.avgValvePosition,
           item.avgTemperature,
@@ -368,7 +368,7 @@ const getScatterData = async () => {
     },
     series: [
       {
-        symbolSize: 20,
+        symbolSize: 10,
         data: res.data.map((item) => [
           item.avgSupplyWaterTemperature,
           item.avgTemperature,
@@ -392,7 +392,7 @@ const getScatterData = async () => {
     },
     series: [
       {
-        symbolSize: 20,
+        symbolSize: 10,
         data: res.data.map((item) => [
           item.avgSupplyWaterPressure,
           item.avgTemperature,
