@@ -79,7 +79,9 @@
                 <span>{{ informations.returnWaterPressure }}</span>
               </el-form-item>
               <el-form-item label="异常类型">
-                <span>{{ abnormalTypeTableDesc(informations.abnormalTypes) }}</span>
+                <span>{{
+                  abnormalTypeTableDesc(informations.abnormalTypes)
+                }}</span>
               </el-form-item>
               <el-form-item label="数据采集时间">
                 <span>{{ informations.collectionTime }}</span>
@@ -107,7 +109,9 @@
                 <span>{{ informations.roomHumidity }}</span>
               </el-form-item>
               <el-form-item label="异常类型">
-                <span>{{ abnormalTypeTableDesc(informations.abnormalTypes) }}</span>
+                <span>{{
+                  abnormalTypeTableDesc(informations.abnormalTypes)
+                }}</span>
               </el-form-item>
               <el-form-item label="数据采集时间">
                 <span>{{ informations.collectionTime }}</span>
@@ -172,12 +176,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column
-        label="鉴权密钥"
-        align="loginKey"
-        :show-overflow-tooltip="true"
-        min-width="200"
-      >
+      <el-table-column label="鉴权密钥" align="loginKey" min-width="200">
         <template #default="{ row }">
           <div class="table-edit-wrapper">
             <el-input v-model="row.loginKey" />
@@ -347,6 +346,30 @@
             />
           </el-select>
         </el-form-item>
+        <el-form-item label="IP地址" prop="ipAddress">
+          <el-input v-model="form.ipAddress" placeholder="请输入" />
+        </el-form-item>
+        <el-form-item label="加密密钥" prop="aesKey">
+          <el-input v-model="form.aesKey" placeholder="请输入" />
+        </el-form-item>
+        <el-form-item label="鉴权密钥" prop="loginKey">
+          <el-input v-model="form.loginKey" placeholder="请输入" />
+        </el-form-item>
+        <el-form-item label="数据上报周期" prop="reportPeriod">
+          <el-input v-model="form.reportPeriod" placeholder="请输入" />
+        </el-form-item>
+        <el-form-item label="数据采集间隔" prop="collectPeriod">
+          <el-input v-model="form.collectPeriod" placeholder="请输入" />
+        </el-form-item>
+        <el-form-item label="阀门开度" prop="valvePosition">
+          <el-input v-model="form.valvePosition" placeholder="请输入" />
+        </el-form-item>
+        <el-form-item label="目标回水温度" prop="returnWaterTemperature">
+          <el-input v-model="form.returnWaterTemperature" placeholder="请输入" />
+        </el-form-item>
+        <el-form-item label="目标室温" prop="roomTemperature">
+          <el-input v-model="form.roomTemperature" placeholder="请输入" />
+        </el-form-item>
       </el-form>
       <template #footer>
         <div class="dialog-footer">
@@ -398,10 +421,13 @@ const abnormalTypeTableDesc = computed(() => (type) => {
   const obj = {
     10: '拆卸告警',
     20: '阀门堵转',
-    30: '传感器异常',
+    30: '传感器异常'
   }
   if (type) {
-    const types = type.split(',').map(item => obj[item]).join(',')
+    const types = type
+      .split(',')
+      .map((item) => obj[item])
+      .join(',')
     return types
   }
   return ''
@@ -475,7 +501,15 @@ function handleUpdate(row) {
     deviceType: row.deviceType + '',
     dtuSn: row.dtuSn || '',
     communityId: row.communityId,
-    communityName: row.communityName
+    communityName: row.communityName,
+    ipAddress: row.ipAddress,
+    aesKey: row.aesKey,
+    loginKey: row.loginKey,
+    reportPeriod: row.reportPeriod,
+    collectPeriod: row.collectPeriod,
+    valvePosition: row.valvePosition,
+    returnWaterTemperature: row.returnWaterTemperature,
+    roomTemperature: row.roomTemperature
   }
   title.value = '修改'
   visible.value = true
@@ -503,7 +537,10 @@ function submitMethod() {
       const method = form.value.id ? editMethod : addMethod
       const communityName = commuityList.value.find(
         (item) => item.id === form.value.communityId
-      ).name
+      )?.name
+      if (!communityName) {
+        return proxy.$modal.msgWarning('选择的小区不存在，请重新检查')
+      }
       const { code } = await method({ ...form.value, communityName }).catch(
         () => (dialogLoading.value = false)
       )
@@ -524,7 +561,15 @@ function reset() {
     deviceType: undefined,
     dtuSn: undefined,
     communityId: undefined,
-    communityName: undefined
+    communityName: undefined,
+    ipAddress: undefined,
+    aesKey: undefined,
+    loginKey: undefined,
+    reportPeriod: undefined,
+    collectPeriod: undefined,
+    valvePosition: undefined,
+    returnWaterTemperature: undefined,
+    roomTemperature: undefined
   }
   proxy.resetForm('operateRef')
 }

@@ -21,7 +21,7 @@ export function addMethod(data) {
 // 修改设备
 export function editMethod(data) {
   return request({
-    url: "/biz/device/edit",
+    url: "/biz/device/update",
     method: "post",
     data,
   });
