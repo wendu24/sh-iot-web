@@ -398,6 +398,7 @@ import {
 import { getCommunityList } from '@/api/home'
 import { computed, watch } from 'vue'
 import useAppStore from '@/store/modules/app'
+const deviceTypeENUM = useAppStore().$state.deviceTypeENUM
 const { proxy } = getCurrentInstance()
 const commuityList = ref([])
 const deviceList = ref([])
@@ -408,14 +409,14 @@ const title = ref('')
 const dialogLoading = ref(false)
 const visible = ref(false)
 const deviceTypeList = computed(() => {
-  return Object.keys(useAppStore().$state.deviceTypeENUM).map((item) => ({
-    name: useAppStore().$state.deviceTypeENUM[item],
+  return Object.keys(deviceTypeENUM).map((item) => ({
+    name: deviceTypeENUM[item],
     value: item,
     id: item
   }))
 })
 const deviceTypeTableDesc = computed(
-  () => (type) => useAppStore().$state.deviceTypeENUM[type]
+  () => (type) => deviceTypeENUM[type]
 )
 const abnormalTypeTableDesc = computed(() => (type) => {
   const obj = {
