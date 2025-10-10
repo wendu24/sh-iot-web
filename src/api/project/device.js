@@ -44,3 +44,11 @@ export function editOtherInfoMethod(data) {
     data,
   });
 }
+
+// 查看数据信息
+export function viewInfoMethod(url) {
+  return request({
+    url: `/data/latest/${url}`,
+    method: "get",
+  });
+}

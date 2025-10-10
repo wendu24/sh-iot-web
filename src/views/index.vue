@@ -268,6 +268,9 @@ const getRoomDataThirtyDay = async () => {
   };
   const myChart1 = echarts.init(chart1.value);
   myChart1.setOption(option);
+  window.addEventListener('resize', () => {
+    myChart1.resize();
+  });
 };
 
 // 获取前五及后五小区温度
@@ -325,6 +328,10 @@ const getCommunityTemperature = async () => {
   const myChart3 = echarts.init(chart3.value);
   myChart2.setOption(option2);
   myChart3.setOption(option3);
+  window.addEventListener('resize', () => {
+    myChart2.resize();
+    myChart3.resize();
+  });
 };
 
 const getScatterData = async () => {
@@ -407,6 +414,11 @@ const getScatterData = async () => {
   myChart4.setOption(option4);
   myChart5.setOption(option5);
   myChart6.setOption(option6);
+  window.addEventListener('resize', () => {
+    myChart4.resize();
+    myChart5.resize();
+    myChart6.resize();
+  });
 };
 
 onMounted(() => {

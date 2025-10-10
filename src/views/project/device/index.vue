@@ -41,10 +41,104 @@
     </el-row>
 
     <!-- 表格数据 -->
-    <el-table v-loading="loading" :data="deviceList">
+    <el-table
+      v-loading="loading"
+      row-key="id"
+      :data="deviceList"
+      @expand-change="expandChangeMethod"
+    >
+      <el-table-column type="expand">
+        <template #default="{ row }">
+          <template v-if="row.deviceType === 20 || row.deviceType === 40">
+            <el-form label-position="left" inline class="demo-table-expand">
+              <el-form-item label="电池电量">
+                <span>{{ informations.batteryLevel }}</span>
+              </el-form-item>
+              <el-form-item label="数据上报周期">
+                <span>{{ informations.uplinkPeriod }}(分钟)</span>
+              </el-form-item>
+              <el-form-item label="阀门开度">
+                <span>{{ informations.valvePosition }}%</span>
+              </el-form-item>
+              <el-form-item label="阀门期望开度">
+                <span>{{ informations.targetValvePosition }}%</span>
+              </el-form-item>
+              <el-form-item label="回水温度">
+                <span>{{ informations.returnWaterTemperature }}°C</span>
+              </el-form-item>
+              <el-form-item label="目标回水温度">
+                <span>{{ informations.targetReturnWaterTemperature }}°C</span>
+              </el-form-item>
+              <el-form-item label="供水温度">
+                <span>{{ informations.supplyWaterTemperature }}°C</span>
+              </el-form-item>
+              <el-form-item label="供水压力">
+                <span>{{ informations.supplyWaterPressure }}</span>
+              </el-form-item>
+              <el-form-item label="回水压力">
+                <span>{{ informations.returnWaterPressure }}</span>
+              </el-form-item>
+              <el-form-item label="异常类型">
+                <span>{{ abnormalTypeTableDesc(informations.abnormalTypes) }}</span>
+              </el-form-item>
+              <el-form-item label="数据采集时间">
+                <span>{{ informations.collectionTime }}</span>
+              </el-form-item>
+            </el-form>
+          </template>
+          <template v-if="row.deviceType === 30">
+            <el-form label-position="left" inline class="demo-table-expand">
+              <el-form-item label="设备版本">
+                <span>{{ informations.deviceVersion }}</span>
+              </el-form-item>
+              <el-form-item label="电池电量">
+                <span>{{ informations.batteryLevel }}</span>
+              </el-form-item>
+              <el-form-item label="数据上报周期">
+                <span>{{ informations.uplinkPeriod }}(分钟)</span>
+              </el-form-item>
+              <el-form-item label="信号强度">
+                <span>{{ informations.signalstrength }}</span>
+              </el-form-item>
+              <el-form-item label="室内温度">
+                <span>{{ informations.roomTemperature }}°C</span>
+              </el-form-item>
+              <el-form-item label="室内湿度">
+                <span>{{ informations.roomHumidity }}</span>
+              </el-form-item>
+              <el-form-item label="异常类型">
+                <span>{{ abnormalTypeTableDesc(informations.abnormalTypes) }}</span>
+              </el-form-item>
+              <el-form-item label="数据采集时间">
+                <span>{{ informations.collectionTime }}</span>
+              </el-form-item>
+            </el-form>
+          </template>
+          <template v-if="row.deviceType === 10">
+            <el-form label-position="left" inline class="demo-table-expand">
+              <el-form-item label="电池电量">
+                <span>{{ informations.batteryLevel }}</span>
+              </el-form-item>
+              <el-form-item label="信号强度">
+                <span>{{ informations.signalstrength }}</span>
+              </el-form-item>
+              <el-form-item label="设备序列号">
+                <span>{{ informations.deviceSn }}</span>
+              </el-form-item>
+              <el-form-item label="数据采集时间">
+                <span>{{ informations.collectionTime }}</span>
+              </el-form-item>
+            </el-form>
+          </template>
+        </template>
+      </el-table-column>
       <el-table-column label="设备序列号" prop="deviceSn" width="180" />
       <el-table-column label="设备位置" prop="position" width="130" />
-      <el-table-column label="设备类型" prop="deviceType" width="130" />
+      <el-table-column label="设备类型" prop="deviceType" width="130">
+        <template #default="{ row }">
+          <span>{{ deviceTypeTableDesc(row.deviceType) }}</span>
+        </template>
+      </el-table-column>
       <el-table-column
         label="DTU序列号"
         prop="dtuSn"
@@ -276,135 +370,151 @@ import {
   addMethod,
   editMethod,
   editOtherInfoMethod,
-} from "@/api/project/device";
-import { getCommunityList } from "@/api/home";
-import { watch } from "vue";
-import useAppStore from "@/store/modules/app";
-const { proxy } = getCurrentInstance();
-const commuityList = ref([]);
-const deviceList = ref([]);
-const loading = ref(true);
-const showSearch = ref(true);
-const total = ref(0);
-const title = ref("");
-const dialogLoading = ref(false);
-const visible = ref(false);
+  viewInfoMethod
+} from '@/api/project/device'
+import { getCommunityList } from '@/api/home'
+import { computed, watch } from 'vue'
+import useAppStore from '@/store/modules/app'
+const { proxy } = getCurrentInstance()
+const commuityList = ref([])
+const deviceList = ref([])
+const loading = ref(true)
+const showSearch = ref(true)
+const total = ref(0)
+const title = ref('')
+const dialogLoading = ref(false)
+const visible = ref(false)
 const deviceTypeList = computed(() => {
   return Object.keys(useAppStore().$state.deviceTypeENUM).map((item) => ({
     name: useAppStore().$state.deviceTypeENUM[item],
     value: item,
-    id: item,
-  }));
-});
+    id: item
+  }))
+})
+const deviceTypeTableDesc = computed(
+  () => (type) => useAppStore().$state.deviceTypeENUM[type]
+)
+const abnormalTypeTableDesc = computed(() => (type) => {
+  const obj = {
+    10: '拆卸告警',
+    20: '阀门堵转',
+    30: '传感器异常',
+  }
+  if (type) {
+    const types = type.split(',').map(item => obj[item]).join(',')
+    return types
+  }
+  return ''
+})
 
 const data = reactive({
   form: {},
   queryParams: {
     pageNum: 1,
     pageSize: 10,
-    deviceSn: undefined,
+    deviceSn: undefined
   },
   rules: {
     deviceSn: [
-      { required: true, message: "设备序列号不能为空", trigger: "blur" },
+      { required: true, message: '设备序列号不能为空', trigger: 'blur' }
     ],
     deviceType: [
-      { required: true, message: "设备不能为空", trigger: "change" },
+      { required: true, message: '设备不能为空', trigger: 'change' }
     ],
-    dtuSn: [{ required: true, message: "dtu序列号不能为空", trigger: "blur" }],
+    dtuSn: [{ required: true, message: 'dtu序列号不能为空', trigger: 'blur' }],
     communityId: [
-      { required: true, message: "小区不能为空", trigger: "change" },
-    ],
-  },
-});
+      { required: true, message: '小区不能为空', trigger: 'change' }
+    ]
+  }
+})
 
-const { queryParams, form, rules } = toRefs(data);
+const { queryParams, form, rules } = toRefs(data)
 watch(
   form,
   (newValue, oldValue) => {
-    rules.value.dtuSn[0].required = newValue.deviceType === "10";
+    rules.value.dtuSn[0].required = newValue.deviceType === '10'
   },
   { deep: true }
-);
+)
 
 /** 查询列表 */
 function getList() {
-  loading.value = true;
+  loading.value = true
   getDeviceList(queryParams.value).then((res) => {
-    deviceList.value = res.records;
-    total.value = res.total;
-    loading.value = false;
-  });
+    deviceList.value = res.records
+    total.value = res.total
+    loading.value = false
+  })
 }
 
 /** 搜索按钮操作 */
 function handleQuery() {
-  queryParams.value.pageNum = 1;
-  getList();
+  queryParams.value.pageNum = 1
+  getList()
 }
 
 /** 重置按钮操作 */
 function resetQuery() {
-  proxy.resetForm("queryRef");
-  handleQuery();
+  proxy.resetForm('queryRef')
+  handleQuery()
 }
 
 /** 新增设备 */
 function handleAdd() {
-  title.value = "新增";
-  reset();
-  visible.value = true;
+  title.value = '新增'
+  reset()
+  visible.value = true
 }
 
 /** 修改设备 */
 function handleUpdate(row) {
-  reset();
+  reset()
   form.value = {
     id: row.id,
     deviceSn: row.deviceSn,
-    deviceType: row.deviceType + "",
-    dtuSn: row.dtuSn || "",
+    deviceType: row.deviceType + '',
+    dtuSn: row.dtuSn || '',
     communityId: row.communityId,
-    communityName: row.communityName,
-  };
-  title.value = "修改";
-  visible.value = true;
+    communityName: row.communityName
+  }
+  title.value = '修改'
+  visible.value = true
 }
 
 /** 删除设备 */
 async function handleDelete(row) {
   proxy.$modal
-    .confirm("是否确认删除该数据项?")
+    .confirm('是否确认删除该数据项?')
     .then(function () {
-      return deleteMethod({ id: row.id });
+      return deleteMethod({ id: row.id })
     })
     .then(() => {
-      getList();
-      proxy.$modal.msgSuccess("删除成功");
+      getList()
+      proxy.$modal.msgSuccess('删除成功')
     })
-    .catch(() => {});
+    .catch(() => {})
 }
 
 /** 提交 */
 function submitMethod() {
-  proxy.$refs["operateRef"].validate(async (valid) => {
+  proxy.$refs['operateRef'].validate(async (valid) => {
     if (valid) {
-      dialogLoading.value = true;
-      const method = form.value.id ? editMethod : addMethod;
+      dialogLoading.value = true
+      const method = form.value.id ? editMethod : addMethod
       const communityName = commuityList.value.find(
         (item) => item.id === form.value.communityId
-      ).name;
+      ).name
       const { code } = await method({ ...form.value, communityName }).catch(
         () => (dialogLoading.value = false)
-      );
-      dialogLoading.value = false;
+      )
+      dialogLoading.value = false
       if (code === 200) {
-        visible.value = false;
-        proxy.$modal.msgSuccess("操作成功");
-        getList();
+        visible.value = false
+        proxy.$modal.msgSuccess('操作成功')
+        getList()
       }
     }
-  });
+  })
 }
 
 function reset() {
@@ -414,44 +524,62 @@ function reset() {
     deviceType: undefined,
     dtuSn: undefined,
     communityId: undefined,
-    communityName: undefined,
-  };
-  proxy.resetForm("operateRef");
+    communityName: undefined
+  }
+  proxy.resetForm('operateRef')
 }
 
 // 获取小区下拉列表
 const getCommunityLists = async () => {
   const res = await getCommunityList({
     pageNum: 1,
-    pageSize: 1000,
-  });
-  commuityList.value = res.records;
-};
+    pageSize: 1000
+  })
+  commuityList.value = res.records
+}
 
 const onTableClick = async (row, key, readWriteFlag, params, cmdcode) => {
   if (!row[key]) {
-    return proxy.$modal.msgWarning("请输入值再操作！");
+    return proxy.$modal.msgWarning('请输入值再操作！')
   }
   const postValue = {
     deviceSn: row.deviceSn,
     cmdcode,
     readWriteFlag,
-    [key]: row[key],
-  };
+    [key]: row[key]
+  }
   if (readWriteFlag === 1) {
-    postValue[params] = row[key];
+    postValue[params] = row[key]
   }
-  const res = await editOtherInfoMethod(postValue);
+  const res = await editOtherInfoMethod(postValue)
   if (res.code === 200) {
-    proxy.$modal.msgSuccess("操作成功");
-    readWriteFlag === 1 && getList();
+    proxy.$modal.msgSuccess('操作成功')
+    readWriteFlag === 1 && getList()
   }
-};
+}
+
+const informations = ref({})
+const expandChangeMethod = async (row, expandedRows) => {
+  // 判断当前行是否在已展开的行数组中
+  const isExpanded = expandedRows.some(
+    (expandedRow) => expandedRow.id === row.id
+  )
+  if (isExpanded) {
+    const urlObj = {
+      10: `dtu/${row.deviceSn}`,
+      20: `mqtt/${row.deviceSn}`,
+      30: `udp/${row.deviceSn}`,
+      40: `mqtt/${row.deviceSn}`
+    }
+    const res = await viewInfoMethod(urlObj[row.deviceType])
+    informations.value = res.data
+  }
+}
 
 onMounted(() => {
-  getList();
-  getCommunityLists();
-});
+  getList()
+  getCommunityLists()
+})
 </script>
 <style lang="scss" scoped>
 .device-container {
@@ -464,6 +592,25 @@ onMounted(() => {
     .el-icon {
       margin-left: 6px;
       cursor: pointer;
+    }
+  }
+
+  .demo-table-expand {
+    padding-left: 30px;
+    max-width: 600px;
+
+    .el-form-item {
+      width: 32%;
+      margin-bottom: 0;
+      margin-right: 2px;
+
+      &:nth-last-child(2) {
+        width: 100%;
+      }
+
+      &:last-child {
+        width: 100%;
+      }
     }
   }
 }
