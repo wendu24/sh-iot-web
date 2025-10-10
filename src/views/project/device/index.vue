@@ -100,7 +100,7 @@
                 <span>{{ informations.uplinkPeriod }}(分钟)</span>
               </el-form-item>
               <el-form-item label="信号强度">
-                <span>{{ informations.signalstrength }}</span>
+                <span>{{ informations.signalStrength }}</span>
               </el-form-item>
               <el-form-item label="室内温度">
                 <span>{{ informations.roomTemperature }}°C</span>
@@ -124,7 +124,7 @@
                 <span>{{ informations.batteryLevel }}</span>
               </el-form-item>
               <el-form-item label="信号强度">
-                <span>{{ informations.signalstrength }}</span>
+                <span>{{ informations.signalStrength }}</span>
               </el-form-item>
               <el-form-item label="设备序列号">
                 <span>{{ informations.deviceSn }}</span>
