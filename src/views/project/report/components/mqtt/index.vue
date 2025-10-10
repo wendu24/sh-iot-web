@@ -1,0 +1,129 @@
+<template>
+  <div class="report-mqtt-container">
+    <!-- 表格数据 -->
+    <el-table v-loading="loading" :data="mqttList">
+      <el-table-column label="设备编号" prop="deviceSn" min-width="180" />
+      <el-table-column label="ICCID" prop="iccId" min-width="200" />
+      <el-table-column
+        label="小区名称"
+        prop="communityName"
+        :show-overflow-tooltip="true"
+        min-width="150"
+      />
+      <el-table-column label="设备版本" prop="deviceVersion" width="100" />
+      <el-table-column
+        label="异常"
+        prop="abnormalTypes"
+        min-width="100"
+        :show-overflow-tooltip="true"
+      >
+        <template #default="{ row }">
+          <span>{{ abnormalTypeTableDesc(row.abnormalTypes) }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="电池电量" prop="batteryLevel" width="100" />
+      <el-table-column label="上报周期" prop="reportPeriod" width="100" />
+      <el-table-column label="信号强度" prop="signalStrength" width="100" />
+      <el-table-column label="采集时间" prop="collectTime" width="160" />
+      <el-table-column
+        label="阀门开度"
+        prop="valvePosition"
+        width="100"
+        :show-overflow-tooltip="true"
+      />
+      <el-table-column
+        label="阀门期望开度"
+        prop="targetValvePosition"
+        width="140"
+        :show-overflow-tooltip="true"
+      />
+      <el-table-column
+        label="回水温度°C"
+        prop="returnWaterTemperature"
+        width="100"
+        :show-overflow-tooltip="true"
+      />
+      <el-table-column
+        label="目标回水温度°C"
+        prop="targetReturnWaterTemperature"
+        width="140"
+        :show-overflow-tooltip="true"
+      />
+      <el-table-column
+        label="供水温度°C"
+        prop="supplyWaterTemperature"
+        width="100"
+        :show-overflow-tooltip="true"
+      />
+      <el-table-column
+        label="供水压力"
+        prop="supplyWaterPressure"
+        width="100"
+        :show-overflow-tooltip="true"
+      />
+      <el-table-column
+        label="回水压力"
+        prop="returnWaterPressure"
+        width="100"
+        :show-overflow-tooltip="true"
+      />
+    </el-table>
+
+    <pagination
+      v-show="total > 0"
+      :total="total"
+      v-model:page="queryParams.pageNum"
+      v-model:limit="queryParams.pageSize"
+      @pagination="getList"
+    />
+  </div>
+</template>
+
+<script setup name="Mqtt">
+import { getMqttList } from '@/api/project/report'
+const abnormalTypeTableDesc = computed(() => (type) => {
+  const obj = {
+    10: '拆卸告警',
+    20: '阀门堵转',
+    30: '传感器异常'
+  }
+  if (type) {
+    const types = type
+      .split(',')
+      .map((item) => obj[item])
+      .join(',')
+    return types
+  }
+  return ''
+})
+
+const mqttList = ref([])
+const loading = ref(true)
+const total = ref(0)
+const data = reactive({
+  queryParams: {
+    pageNum: 1,
+    pageSize: 10
+  }
+})
+const { queryParams } = toRefs(data)
+
+/** 查询列表 */
+function getList(params = queryParams.value) {
+  loading.value = true
+  getMqttList(params).then((res) => {
+    queryParams.value.pageNum = params.pageNum
+    queryParams.value.pageSize = params.pageSize
+    mqttList.value = res.records
+    total.value = res.total
+    loading.value = false
+  })
+}
+
+onMounted(() => {
+  getList()
+})
+defineExpose({
+  getList
+})
+</script>
