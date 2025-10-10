@@ -16,23 +16,20 @@
           @keyup.enter="handleQuery"
         />
       </el-form-item>
+      <el-form-item label="小区" prop="communityId">
+        <el-select v-model="queryParams.communityId" placeholder="请选择小区" clearable style="width: 240px">
+          <el-option v-for="dict of commuityList" :key="dict.id" :label="dict.name" :value="dict.id" />
+        </el-select>
+      </el-form-item>
       <el-form-item label="命令码" prop="cmdCode">
-        <el-input
-          v-model="queryParams.cmdCode"
-          placeholder="请输入命令码"
-          clearable
-          style="width: 240px"
-          @keyup.enter="handleQuery"
-        />
+        <el-select v-model="queryParams.cmdCode" placeholder="请选择命令码" clearable style="width: 240px">
+          <el-option v-for="dict of cmdCodeList" :key="dict.value" :label="dict.name" :value="dict.value" />
+        </el-select>
       </el-form-item>
       <el-form-item label="读写" prop="readOrWrite">
-        <el-input
-          v-model="queryParams.readOrWrite"
-          placeholder="请输入读写"
-          clearable
-          style="width: 240px"
-          @keyup.enter="handleQuery"
-        />
+        <el-select v-model="queryParams.readOrWrite" placeholder="请选择" clearable style="width: 240px">
+          <el-option v-for="dict of readOrWriteList" :key="dict.value" :label="dict.name" :value="dict.value" />
+        </el-select>
       </el-form-item>
       <el-form-item label="是否响应" prop="hasReply">
         <el-select v-model="queryParams.hasReply" placeholder="请选择" clearable style="width: 240px">
@@ -152,37 +149,44 @@
 
 <script setup name="Issue">
 import { getSetreplyList } from '@/api/project/issue'
+import { getCommunityList } from '@/api/home'
 const { proxy } = getCurrentInstance()
+const commuityList = ref([])
 const issueList = ref([])
 const loading = ref(true)
 const showSearch = ref(true)
 const total = ref(0)
+const cmdCodeList = ref([
+  { value: 22, name: 'IP地址' },
+  { value: 25, name: '加密密钥' },
+  { value: 35, name: '数据上报周期' },
+  { value: 37, name: '数据采集间隔' },
+  { value: 38, name: '鉴权密钥' },
+  { value: 48, name: '阀门开度' },
+  { value: 49, name: '目标回水温度' },
+  { value: 50, name: '目标室温' },
+])
+const readOrWriteList = ref([
+  { value: 0, name: '读取' },
+  { value: 1, name: '下发' },
+])
 const cmdCodeDesc = computed(() => (cmdCode) => {
-  const desc = {
-    22: 'IP地址',
-    25: '加密密钥',
-    35: '数据上报周期',
-    37: '数据采集间隔',
-    38: '鉴权密钥',
-    48: '阀门开度',
-    49: '目标回水温度',
-    50: '目标室温',
-  }
-  return desc[cmdCode]
+  const item = cmdCodeList.value.find(item => item.value === cmdCode)
+  if (item) return item.name
+  return ''
 })
 
 const readOrWriteDesc = computed(() => (readOrWrite) => {
-  const desc = {
-    0: '读取',
-    1: '下发'
-  }
-  return desc[readOrWrite]
+  const item = readOrWriteList.value.find(item => item.value === readOrWrite)
+  if (item) return item.name
+  return ''
 })
 const data = reactive({
   queryParams: {
     pageNum: 1,
     pageSize: 10,
     deviceSn: undefined,
+    communityId: undefined,
     readOrWrite: undefined,
     cmdCode: undefined,
     hasReply: undefined,
@@ -223,7 +227,17 @@ function resetQuery() {
   handleQuery()
 }
 
+// 获取小区下拉列表
+const getCommunityLists = async () => {
+  const res = await getCommunityList({
+    pageNum: 1,
+    pageSize: 1000,
+  });
+  commuityList.value = res.records;
+};
+
 onMounted(() => {
   getList()
+  getCommunityLists()
 })
 </script>
