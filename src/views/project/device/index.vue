@@ -396,7 +396,6 @@ import {
   viewInfoMethod
 } from '@/api/project/device'
 import { getCommunityList } from '@/api/home'
-import { computed, watch } from 'vue'
 import useAppStore from '@/store/modules/app'
 const deviceTypeENUM = useAppStore().$state.deviceTypeENUM
 const { proxy } = getCurrentInstance()
@@ -534,7 +533,6 @@ async function handleDelete(row) {
 function submitMethod() {
   proxy.$refs['operateRef'].validate(async (valid) => {
     if (valid) {
-      dialogLoading.value = true
       const method = form.value.id ? editMethod : addMethod
       const communityName = commuityList.value.find(
         (item) => item.id === form.value.communityId
@@ -542,6 +540,7 @@ function submitMethod() {
       if (!communityName) {
         return proxy.$modal.msgWarning('选择的小区不存在，请重新检查')
       }
+      dialogLoading.value = true
       const { code } = await method({ ...form.value, communityName }).catch(
         () => (dialogLoading.value = false)
       )
