@@ -44,3 +44,12 @@ export function getScatterChart(data) {
     data,
   });
 }
+
+// 供水水温/回水水温折线图数据
+export function getWaterTemperatureChart(data) {
+  return request({
+    url: "/home/waterTemperatureAndHour",
+    method: "post",
+    data,
+  });
+}

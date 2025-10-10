@@ -91,11 +91,11 @@
 
     <div class="echarts-wrapper">
       <div ref="chart1" class="chart" style="height: 300px"></div>
+      <div ref="chart6" class="chart" style="height: 300px"></div>
       <div ref="chart2" class="chart" style="height: 300px"></div>
       <div ref="chart3" class="chart" style="height: 300px"></div>
       <div ref="chart4" class="chart" style="height: 300px"></div>
       <div ref="chart5" class="chart" style="height: 300px"></div>
-      <div ref="chart6" class="chart" style="height: 300px"></div>
     </div>
   </div>
 </template>
@@ -110,6 +110,7 @@ import {
   getRoomDataThirtyDays,
   getTop5TemperatureCommunity,
   getScatterChart,
+  getWaterTemperatureChart
 } from "@/api/home";
 const commuityList = ref([]);
 const overviews = ref({});
@@ -283,6 +284,13 @@ const getCommunityTemperature = async () => {
       text: "近30天室温较高小区",
       left: "center",
     },
+    tooltip: {
+      trigger: 'axis'
+    },
+    legend: {
+      data: ['平均室温', '平均供水水温', '平均供水水压'],
+      bottom: "10",
+    },
     xAxis: {
       type: "category",
       data: res.data.top5.map((item) => item.communityName),
@@ -296,15 +304,33 @@ const getCommunityTemperature = async () => {
     },
     series: [
       {
+        name: '平均室温',
         data: res.data.top5.map((item) => item.avgRoomTemperature),
         type: "bar",
       },
+      {
+        name: '平均供水水温',
+        data: res.data.top5.map((item) => item.supplyWaterTemperature),
+        type: "bar",
+      },
+      {
+        name: '平均供水水压',
+        data: res.data.top5.map((item) => item.supplyWaterPressure),
+        type: "bar",
+      }
     ],
   };
   const option3 = {
     title: {
       text: "近30天室温较低小区",
       left: "center",
+    },
+    tooltip: {
+      trigger: 'axis'
+    },
+    legend: {
+      data: ['平均室温', '平均供水水温', '平均供水水压'],
+      bottom: "10",
     },
     xAxis: {
       type: "category",
@@ -319,9 +345,20 @@ const getCommunityTemperature = async () => {
     },
     series: [
       {
+        name: '平均室温',
         data: res.data.low5.map((item) => item.avgRoomTemperature),
         type: "bar",
       },
+      {
+        name: '平均供水水温',
+        data: res.data.low5.map((item) => item.supplyWaterTemperature),
+        type: "bar",
+      },
+      {
+        name: '平均供水水压',
+        data: res.data.low5.map((item) => item.supplyWaterPressure),
+        type: "bar",
+      }
     ],
   };
   const myChart2 = echarts.init(chart2.value);
@@ -384,42 +421,90 @@ const getScatterData = async () => {
       },
     ],
   };
-  const option6 = {
-    title: {
-      text: "供水水压与室温散点图",
-      left: "center",
-    },
-    xAxis: {},
-    yAxis: {
-      type: "value",
-      alignTicks: true,
-      axisLabel: {
-        formatter: "{value}°C",
-      },
-    },
-    series: [
-      {
-        symbolSize: 10,
-        data: res.data.map((item) => [
-          item.avgSupplyWaterPressure,
-          item.avgTemperature,
-        ]),
-        type: "scatter",
-      },
-    ],
-  };
   const myChart4 = echarts.init(chart4.value);
   const myChart5 = echarts.init(chart5.value);
-  const myChart6 = echarts.init(chart6.value);
   myChart4.setOption(option4);
   myChart5.setOption(option5);
-  myChart6.setOption(option6);
   window.addEventListener('resize', () => {
     myChart4.resize();
     myChart5.resize();
-    myChart6.resize();
   });
 };
+
+const getWaterTemperatureData = async () => {
+  const res = await getWaterTemperatureChart({ communityIds: form.communityIds })
+  const option6 = {
+    title: {
+      text: "近30天供水温度和回水温度",
+      left: 0,
+    },
+    tooltip: {
+      trigger: "axis",
+      axisPointer: {
+        type: "cross", // 十字准星指示器，同时显示两个轴的数据
+      },
+    },
+    legend: {
+      data: ["供水温度", "回水温度"],
+      right: 0,
+    },
+    grid: {
+      left: "3%",
+      right: "4%",
+      bottom: "3%",
+      containLabel: true,
+    },
+    xAxis: {
+      type: "category",
+      boundaryGap: false,
+      axisLabel: {
+        interval: 0,
+        margin: 15,
+      },
+      data: res.data.map((item) => item.hour),
+    },
+    yAxis: [
+      {
+        type: "value",
+        position: "left",
+        alignTicks: true,
+        axisLabel: {
+          formatter: "{value}°C",
+        },
+      },
+      {
+        type: "value",
+        position: "right",
+        alignTicks: true,
+        axisLabel: {
+          formatter: "{value}°C",
+        },
+        startValue: 0,
+      },
+    ],
+    series: [
+      {
+        name: "供水温度",
+        type: "line",
+        // stack: "总量",
+        yAxisIndex: 0,
+        data: res.data.map((item) => item.avgSupplyWaterTemperature),
+      },
+      {
+        name: "回水温度",
+        type: "line",
+        // stack: "总量",
+        yAxisIndex: 1,
+        data: res.data.map((item) => item.avgReturnWaterTemperature),
+      },
+    ],
+  };
+  const myChart6 = echarts.init(chart6.value);
+  myChart6.setOption(option6);
+  window.addEventListener('resize', () => {
+    myChart6.resize();
+  });
+}
 
 onMounted(() => {
   getCommunityLists();
@@ -427,6 +512,7 @@ onMounted(() => {
   getRoomDataThirtyDay();
   getCommunityTemperature();
   getScatterData();
+  getWaterTemperatureData()
 });
 </script>
 
