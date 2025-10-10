@@ -172,6 +172,7 @@ const onSubmit = () => {
   getOverViewData();
   getRoomDataThirtyDay();
   getScatterData();
+  getWaterTemperatureData();
 };
 
 // 获取小区下拉列表
@@ -512,7 +513,7 @@ onMounted(() => {
   getRoomDataThirtyDay();
   getCommunityTemperature();
   getScatterData();
-  getWaterTemperatureData()
+  getWaterTemperatureData();
 });
 </script>
 
