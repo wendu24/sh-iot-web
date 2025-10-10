@@ -596,7 +596,7 @@ const onTableClick = async (row, key, readWriteFlag, params, cmdcode) => {
   if (readWriteFlag === 1) {
     postValue[params] = row[key]
   }
-  const res = await editOtherInfoMethod(postValue)
+  const res = await editOtherInfoMethod([postValue])
   if (res.code === 200) {
     proxy.$modal.msgSuccess('操作成功')
     readWriteFlag === 1 && getList()
