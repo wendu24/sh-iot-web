@@ -60,12 +60,19 @@
 </template>
 
 <script setup name="report-Form">
+import { getCommunityList } from '@/api/home'
 const { proxy } = getCurrentInstance()
 const emit = defineEmits(['update'])
-const props = defineProps({
-  commuity: Array
-})
-const commuityList = props.commuity
+const commuityList = ref([])
+// 获取小区下拉列表
+const getCommunityLists = async () => {
+  const res = await getCommunityList({
+    pageNum: 1,
+    pageSize: 1000,
+  });
+  commuityList.value = res.records;
+};
+
 const showSearch = ref(true)
 const data = reactive({
   queryParams: {
@@ -170,4 +177,8 @@ const handleDateChange = (val) => {
     pickerState.firstSelectedDate = null
   }
 }
+
+onMounted(() => {
+  getCommunityLists()
+})
 </script>
