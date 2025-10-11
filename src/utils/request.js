@@ -149,4 +149,36 @@ export function download(url, params, filename, config) {
   })
 }
 
+// let count = 0
+// export async function parseFile(exportUrl, fileName, finishFunction,length) {
+//   try {
+//     const response = await request({
+//       url: '/tms/oss/download-stream',
+//       data: { url: exportUrl },
+//       method: 'post',
+//       responseType: 'blob',
+//       timeout: 1000 * 60 * 10, // 十分钟
+//     })
+
+//     // 文件计数，全部完成清除loading
+//     count++
+    
+//     if(count == length) {
+//       count = 0
+//       finishFunction()
+//     }
+//     const url = window.URL.createObjectURL(new Blob([response], {type: 'application/octet-stream'}))
+//     const link = document.createElement('a')
+//     link.style.display = 'none'
+//     link.href = url
+//     const names = fileName ? `${fileName}` : `导入模板.xlsx`
+//     link.setAttribute('download', names)
+//     document.body.appendChild(link)
+//     link.click()
+//     document.body.removeChild(link)
+//   } catch (err) {
+//     console.error(err);
+//   }
+// }
+
 export default service
