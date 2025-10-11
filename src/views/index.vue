@@ -252,18 +252,14 @@ const getRoomDataThirtyDay = async () => {
       {
         name: '温度',
         type: 'line',
-        // stack: "总量",
         yAxisIndex: 0,
         data: res.data.map((item) => item.avgRoomTemperature)
       },
       {
         name: '湿度',
         type: 'line',
-        // stack: "总量",
         yAxisIndex: 1,
-        data: res.data.map((item) => {
-          return item.avgRoomHumidity
-        })
+        data: res.data.map((item) => item.avgRoomHumidity)
       }
     ]
   }
@@ -295,28 +291,40 @@ const getCommunityTemperature = async () => {
       type: 'category',
       data: res.data.top5.map((item) => item.communityName)
     },
-    yAxis: {
-      type: 'value',
-      alignTicks: true,
-      axisLabel: {
-        formatter: '{value}°C'
+    yAxis: [
+      {
+        type: 'value',
+        alignTicks: true,
+        axisLabel: {
+          formatter: '{value}°C'
+        }
+      },
+      {
+        type: 'value',
+        alignTicks: true,
+        axisLabel: {
+          formatter: '{value}MPa'
+        }
       }
-    },
+    ],
     series: [
       {
         name: '平均室温',
         data: res.data.top5.map((item) => item.avgRoomTemperature),
-        type: 'bar'
+        type: 'bar',
+        yAxisIndex: 0,
       },
       {
         name: '平均供水水温',
         data: res.data.top5.map((item) => item.supplyWaterTemperature),
-        type: 'bar'
+        type: 'bar',
+        yAxisIndex: 0,
       },
       {
         name: '平均供水水压',
         data: res.data.top5.map((item) => item.supplyWaterPressure),
-        type: 'bar'
+        type: 'bar',
+        yAxisIndex: 1,
       }
     ]
   }
@@ -336,28 +344,40 @@ const getCommunityTemperature = async () => {
       type: 'category',
       data: res.data.low5.map((item) => item.communityName)
     },
-    yAxis: {
-      type: 'value',
-      alignTicks: true,
-      axisLabel: {
-        formatter: '{value}°C'
+    yAxis: [
+      {
+        type: 'value',
+        alignTicks: true,
+        axisLabel: {
+          formatter: '{value}°C'
+        }
+      },
+      {
+        type: 'value',
+        alignTicks: true,
+        axisLabel: {
+          formatter: '{value}MPa'
+        }
       }
-    },
+    ],
     series: [
       {
         name: '平均室温',
         data: res.data.low5.map((item) => item.avgRoomTemperature),
-        type: 'bar'
+        type: 'bar',
+        yAxisIndex: 0,
       },
       {
         name: '平均供水水温',
         data: res.data.low5.map((item) => item.supplyWaterTemperature),
-        type: 'bar'
+        type: 'bar',
+        yAxisIndex: 0,
       },
       {
         name: '平均供水水压',
         data: res.data.low5.map((item) => item.supplyWaterPressure),
-        type: 'bar'
+        type: 'bar',
+        yAxisIndex: 1,
       }
     ]
   }
