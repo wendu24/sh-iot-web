@@ -33,6 +33,15 @@
           v-hasPermi="['project:device:add']"
           >新增</el-button
         >
+
+        <el-button
+          type="info"
+          plain
+          icon="Refresh"
+          v-hasPermi="['project:device:refresh']"
+          @click="handleRefresh(multipleSelect)"
+          >刷新</el-button
+        >
       </el-col>
       <right-toolbar
         v-model:showSearch="showSearch"
@@ -46,7 +55,9 @@
       row-key="id"
       :data="deviceList"
       @expand-change="expandChangeMethod"
+      @selection-change="handleSelectionChange"
     >
+      <el-table-column type="selection" width="55" />
       <el-table-column type="expand">
         <template #default="{ row }">
           <template v-if="row.deviceType === 20 || row.deviceType === 40">
@@ -276,6 +287,7 @@
         label="操作"
         align="center"
         fixed="right"
+        width="120"
         class-name="small-padding fixed-width"
       >
         <template #default="scope">
@@ -286,6 +298,15 @@
               icon="Edit"
               v-hasPermi="['project:device:edit']"
               @click="handleUpdate(scope.row)"
+            ></el-button>
+          </el-tooltip>
+          <el-tooltip content="刷新" placement="top">
+            <el-button
+              link
+              type="primary"
+              icon="Refresh"
+              v-hasPermi="['project:device:refresh']"
+              @click="handleRefresh([scope.row])"
             ></el-button>
           </el-tooltip>
           <el-tooltip content="删除" placement="top">
@@ -392,6 +413,7 @@ import {
   deleteMethod,
   addMethod,
   editMethod,
+  refreshMethod,
   editOtherInfoMethod,
   viewInfoMethod
 } from '@/api/project/device'
@@ -515,6 +537,16 @@ function handleUpdate(row) {
   visible.value = true
 }
 
+/** 刷新 */
+async function handleRefresh(rows = []) {
+  if (rows.length === 0) return proxy.$modal.msgWarning('请勾选数据，再执行操作')
+  const res = await refreshMethod({ deviceSnList: rows.map(item => item.deviceSn) })
+  if (res.code === 200) {
+    proxy.$modal.msgSuccess('刷新成功')
+    getList()
+  }
+}
+
 /** 删除设备 */
 async function handleDelete(row) {
   proxy.$modal
@@ -619,6 +651,11 @@ const expandChangeMethod = async (row, expandedRows) => {
     const res = await viewInfoMethod(urlObj[row.deviceType])
     informations.value = res.data
   }
+}
+
+const multipleSelect = ref([])
+const handleSelectionChange = (value) => {
+  multipleSelect.value = value
 }
 
 onMounted(() => {
