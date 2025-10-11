@@ -40,8 +40,10 @@
           icon="Refresh"
           v-hasPermi="['project:device:refresh']"
           @click="handleRefresh(multipleSelect)"
-          >刷新</el-button
+          >读取</el-button
         >
+
+        <el-button type="success" plain icon="Check" @click="handleIssue">下发</el-button>
       </el-col>
       <right-toolbar
         v-model:showSearch="showSearch"
@@ -166,7 +168,7 @@
           <div class="table-edit-wrapper">
             <el-input v-model="row.ipAddress" />
             <el-icon @click="onTableClick(row, 'ipAddress', 1, 'dataStr', 22)">
-              <edit color="#409EFF" />
+              <check color="#409EFF" />
             </el-icon>
             <el-icon @click="onTableClick(row, 'ipAddress', 0, '', 22)">
               <refresh color="#409EFF" />
@@ -179,7 +181,7 @@
           <div class="table-edit-wrapper">
             <el-input v-model="row.aesKey" />
             <el-icon @click="onTableClick(row, 'aesKey', 1, 'dataStr', 25)">
-              <edit color="#409EFF" />
+              <check color="#409EFF" />
             </el-icon>
             <el-icon @click="onTableClick(row, 'aesKey', 0, '', 25)">
               <refresh color="#409EFF" />
@@ -192,7 +194,7 @@
           <div class="table-edit-wrapper">
             <el-input v-model="row.loginKey" />
             <el-icon @click="onTableClick(row, 'loginKey', 1, 'dataStr', 38)">
-              <edit color="#409EFF" />
+              <check color="#409EFF" />
             </el-icon>
             <el-icon @click="onTableClick(row, 'loginKey', 0, '', 38)">
               <refresh color="#409EFF" />
@@ -205,7 +207,7 @@
           <div class="table-edit-wrapper">
             <el-input v-model="row.reportPeriod" />
             <el-icon @click="onTableClick(row, 'reportPeriod', 1, 'data', 35)">
-              <edit color="#409EFF" />
+              <check color="#409EFF" />
             </el-icon>
             <el-icon @click="onTableClick(row, 'reportPeriod', 0, '', 35)">
               <refresh color="#409EFF" />
@@ -222,7 +224,7 @@
           <div class="table-edit-wrapper">
             <el-input v-model="row.collectPeriod" />
             <el-icon @click="onTableClick(row, 'collectPeriod', 1, 'data', 37)">
-              <edit color="#409EFF" />
+              <check color="#409EFF" />
             </el-icon>
             <el-icon @click="onTableClick(row, 'collectPeriod', 0, '', 37)">
               <refresh color="#409EFF" />
@@ -235,7 +237,7 @@
           <div class="table-edit-wrapper">
             <el-input v-model="row.valvePosition" />
             <el-icon @click="onTableClick(row, 'valvePosition', 1, 'data', 48)">
-              <edit color="#409EFF" />
+              <check color="#409EFF" />
             </el-icon>
             <el-icon @click="onTableClick(row, 'valvePosition', 0, '', 48)">
               <refresh color="#409EFF" />
@@ -256,7 +258,7 @@
                 onTableClick(row, 'returnWaterTemperature', 1, 'data', 49)
               "
             >
-              <edit color="#409EFF" />
+              <check color="#409EFF" />
             </el-icon>
             <el-icon
               @click="onTableClick(row, 'returnWaterTemperature', 0, '', 49)"
@@ -273,7 +275,7 @@
             <el-icon
               @click="onTableClick(row, 'roomTemperature', 1, 'data', 50)"
             >
-              <edit color="#409EFF" />
+              <check color="#409EFF" />
             </el-icon>
             <el-icon @click="onTableClick(row, 'roomTemperature', 0, '', 50)">
               <refresh color="#409EFF" />
@@ -300,7 +302,7 @@
               @click="handleUpdate(scope.row)"
             ></el-button>
           </el-tooltip>
-          <el-tooltip content="刷新" placement="top">
+          <el-tooltip content="读取" placement="top">
             <el-button
               link
               type="primary"
@@ -386,7 +388,10 @@
           <el-input v-model="form.valvePosition" placeholder="请输入" />
         </el-form-item>
         <el-form-item label="目标回水温度" prop="returnWaterTemperature">
-          <el-input v-model="form.returnWaterTemperature" placeholder="请输入" />
+          <el-input
+            v-model="form.returnWaterTemperature"
+            placeholder="请输入"
+          />
         </el-form-item>
         <el-form-item label="目标室温" prop="roomTemperature">
           <el-input v-model="form.roomTemperature" placeholder="请输入" />
@@ -399,6 +404,29 @@
             type="primary"
             :loading="dialogLoading"
             @click="submitMethod"
+            >确 定</el-button
+          >
+        </div>
+      </template>
+    </el-dialog>
+
+    <el-dialog
+      title="批量下发"
+      v-model="issueVisible"
+      width="500px"
+    >
+      <div class="input-wrapper-item" v-for="item of issueValueList" :key="item.cmdCode">
+        <span class="item-label">{{ item.label }}</span>
+        <el-input class="item-input" v-model="item[item.prop]" placeholder="请输入" />
+        <el-icon class="item-icon" @click="issueClick(item)">
+          <check color="#409EFF" />
+        </el-icon>
+      </div>
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button
+            type="primary"
+            @click="issueVisible = false"
             >确 定</el-button
           >
         </div>
@@ -429,6 +457,7 @@ const total = ref(0)
 const title = ref('')
 const dialogLoading = ref(false)
 const visible = ref(false)
+
 const deviceTypeList = computed(() => {
   return Object.keys(deviceTypeENUM).map((item) => ({
     name: deviceTypeENUM[item],
@@ -436,9 +465,7 @@ const deviceTypeList = computed(() => {
     id: item
   }))
 })
-const deviceTypeTableDesc = computed(
-  () => (type) => deviceTypeENUM[type]
-)
+const deviceTypeTableDesc = computed(() => (type) => deviceTypeENUM[type])
 const abnormalTypeTableDesc = computed(() => (type) => {
   const obj = {
     10: '拆卸告警',
@@ -539,8 +566,11 @@ function handleUpdate(row) {
 
 /** 刷新 */
 async function handleRefresh(rows = []) {
-  if (rows.length === 0) return proxy.$modal.msgWarning('请勾选数据，再执行操作')
-  const res = await refreshMethod({ deviceSnList: rows.map(item => item.deviceSn) })
+  if (rows.length === 0)
+    return proxy.$modal.msgWarning('请勾选数据，再执行操作')
+  const res = await refreshMethod({
+    deviceSnList: rows.map((item) => item.deviceSn)
+  })
   if (res.code === 200) {
     proxy.$modal.msgSuccess('刷新成功')
     getList()
@@ -615,13 +645,13 @@ const getCommunityLists = async () => {
   commuityList.value = res.records
 }
 
-const onTableClick = async (row, key, readWriteFlag, params, cmdcode) => {
+const onTableClick = async (row, key, readWriteFlag, params, cmdCode) => {
   if (!row[key]) {
     return proxy.$modal.msgWarning('请输入值再操作！')
   }
   const postValue = {
     deviceSn: row.deviceSn,
-    cmdcode,
+    cmdCode,
     readWriteFlag,
     [key]: row[key]
   }
@@ -656,6 +686,46 @@ const expandChangeMethod = async (row, expandedRows) => {
 const multipleSelect = ref([])
 const handleSelectionChange = (value) => {
   multipleSelect.value = value
+}
+
+const issueVisible = ref(false)
+const issueValueList = ref([
+  { label: 'IP地址', prop: 'ipAddress', ipAddress: '', cmdCode: 22 },
+  { label: '加密密钥', prop: 'aesKey', aesKey: '', cmdCode: 25 },
+  { label: '鉴权密钥', prop: 'loginKey', loginKey: '', cmdCode: 38 },
+  { label: '数据上报周期', prop: 'reportPeriod', reportPeriod: '', cmdCode: 35 },
+  { label: '数据采集间隔', prop: 'collectPeriod', collectPeriod: '', cmdCode: 37 },
+  { label: '阀门开度', prop: 'valvePosition', valvePosition: '', cmdCode: 48 },
+  { label: '目标回水温度', prop: 'returnWaterTemperature', returnWaterTemperature: '', cmdCode: 49 },
+  { label: '目标室温', prop: 'roomTemperature', roomTemperature: '', cmdCode: 50 },
+])
+const handleIssue = () => {
+  issueVisible.value = true
+  issueValueList.value.forEach(item => {
+    const index = multipleSelect.value.findIndex(s => s[item.prop])
+    item[item.prop] = multipleSelect.value[index][item.prop]
+  })
+}
+const issueClick = async (item) => {
+  if (!item[item.prop]) {
+    return proxy.$modal.msgWarning('请输入值再操作！')
+  }
+  const list = multipleSelect.value.map(params => {
+    const paramsStr = ['ipAddress', 'aesKey', 'loginKey'].includes(item.prop) ? 'dataStr' : 'data'
+    return {
+      deviceSn: params.deviceSn,
+      cmdCode: item.cmdCode,
+      readWriteFlag: 1,
+      [item.prop]: item[item.prop],
+      [paramsStr]: item[item.prop]
+    }
+  })
+  const res = await editOtherInfoMethod(list)
+  if (res.code === 200) {
+    issueVisible.value = false
+    proxy.$modal.msgSuccess('操作成功')
+    getList()
+  }
 }
 
 onMounted(() => {
@@ -693,6 +763,28 @@ onMounted(() => {
       &:last-child {
         width: 100%;
       }
+    }
+  }
+
+  .input-wrapper-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 12px;
+
+    .item-label {
+      text-align: right;
+      width: 90px;
+      font-size: 14px;
+      color: #0b1019;
+    }
+
+    .item-input {
+      width: 300px;
+      margin: 0 10px;
+    }
+
+    .item-icon {
+      cursor: pointer;
     }
   }
 }
