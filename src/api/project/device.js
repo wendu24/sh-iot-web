@@ -36,6 +36,15 @@ export function deleteMethod(data) {
   });
 }
 
+// 刷新设备
+export function refreshMethod(data) {
+  return request({
+    url: "/biz/device/refresh",
+    method: "post",
+    data,
+  });
+}
+
 // 修改其他信息
 export function editOtherInfoMethod(data) {
   return request({
