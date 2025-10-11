@@ -1,0 +1,58 @@
+.upload-wrapper {
+  .upload-dialog-body {
+    .upload {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      ::v-deep .el-upload {
+        width: 452px;
+        height: auto;
+        background-color: #fafafa;
+      }
+
+      ::v-deep .el-upload-dragger {
+        width: 452px;
+        height: auto;
+        padding: 0;
+        background-color: #fafafa;
+
+        .upload-icon {
+          width: 24px;
+          height: 24px;
+          margin: 18px 0 6px;
+        }
+
+        .el-icon-loading {
+          font-size: 24px;
+          color: #307eff;
+          margin: 18px 0 6px;
+        }
+
+        .el-upload__text {
+          padding-bottom: 18px;
+          font-size: 12px;
+          font-weight: 400;
+          color: #333;
+
+          em {
+            font-size: 12px;
+            font-weight: 400;
+            color: #307eff;
+          }
+        }
+      }
+    }
+  }
+
+  .el-dialog__footer {
+    .el-button {
+      height: 32px;
+      line-height: 32px;
+      padding: 0 !important;
+      font-size: 14px;
+      width: 72px;
+      border-radius: 4px;
+    }
+  }
+}

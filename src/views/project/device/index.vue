@@ -43,7 +43,23 @@
           >读取</el-button
         >
 
-        <el-button type="success" plain icon="Check" @click="handleIssue">下发</el-button>
+        <el-button
+          type="warning"
+          plain
+          icon="Upload"
+          v-hasPermi="['project:device:import']"
+          @click="handleImport"
+          >导入</el-button
+        >
+
+        <el-button
+          type="success"
+          plain
+          icon="Check"
+          v-hasPermi="['project:device:issue']"
+          @click="handleIssue"
+          >下发</el-button
+        >
       </el-col>
       <right-toolbar
         v-model:showSearch="showSearch"
@@ -410,32 +426,37 @@
       </template>
     </el-dialog>
 
-    <el-dialog
-      title="批量下发"
-      v-model="issueVisible"
-      width="500px"
-    >
-      <div class="input-wrapper-item" v-for="item of issueValueList" :key="item.cmdCode">
+    <el-dialog title="批量下发" v-model="issueVisible" width="500px">
+      <div
+        class="input-wrapper-item"
+        v-for="item of issueValueList"
+        :key="item.cmdCode"
+      >
         <span class="item-label">{{ item.label }}</span>
-        <el-input class="item-input" v-model="item[item.prop]" placeholder="请输入" />
+        <el-input
+          class="item-input"
+          v-model="item[item.prop]"
+          placeholder="请输入"
+        />
         <el-icon class="item-icon" @click="issueClick(item)">
           <check color="#409EFF" />
         </el-icon>
       </div>
       <template #footer>
         <div class="dialog-footer">
-          <el-button
-            type="primary"
-            @click="issueVisible = false"
+          <el-button type="primary" @click="issueVisible = false"
             >确 定</el-button
           >
         </div>
       </template>
     </el-dialog>
+
+    <Import ref="importRef" :importUrl="importUrl" />
   </div>
 </template>
 
 <script setup name="Device">
+import Import from './components/import'
 import {
   getDeviceList,
   deleteMethod,
@@ -693,16 +714,38 @@ const issueValueList = ref([
   { label: 'IP地址', prop: 'ipAddress', ipAddress: '', cmdCode: 22 },
   { label: '加密密钥', prop: 'aesKey', aesKey: '', cmdCode: 25 },
   { label: '鉴权密钥', prop: 'loginKey', loginKey: '', cmdCode: 38 },
-  { label: '数据上报周期', prop: 'reportPeriod', reportPeriod: '', cmdCode: 35 },
-  { label: '数据采集间隔', prop: 'collectPeriod', collectPeriod: '', cmdCode: 37 },
+  {
+    label: '数据上报周期',
+    prop: 'reportPeriod',
+    reportPeriod: '',
+    cmdCode: 35
+  },
+  {
+    label: '数据采集间隔',
+    prop: 'collectPeriod',
+    collectPeriod: '',
+    cmdCode: 37
+  },
   { label: '阀门开度', prop: 'valvePosition', valvePosition: '', cmdCode: 48 },
-  { label: '目标回水温度', prop: 'returnWaterTemperature', returnWaterTemperature: '', cmdCode: 49 },
-  { label: '目标室温', prop: 'roomTemperature', roomTemperature: '', cmdCode: 50 },
+  {
+    label: '目标回水温度',
+    prop: 'returnWaterTemperature',
+    returnWaterTemperature: '',
+    cmdCode: 49
+  },
+  {
+    label: '目标室温',
+    prop: 'roomTemperature',
+    roomTemperature: '',
+    cmdCode: 50
+  }
 ])
 const handleIssue = () => {
+  if (multipleSelect.value.length === 0)
+    return proxy.$modal.msgWarning('请勾选数据，再执行操作')
   issueVisible.value = true
-  issueValueList.value.forEach(item => {
-    const index = multipleSelect.value.findIndex(s => s[item.prop])
+  issueValueList.value.forEach((item) => {
+    const index = multipleSelect.value.findIndex((s) => s[item.prop])
     item[item.prop] = multipleSelect.value[index][item.prop]
   })
 }
@@ -710,8 +753,10 @@ const issueClick = async (item) => {
   if (!item[item.prop]) {
     return proxy.$modal.msgWarning('请输入值再操作！')
   }
-  const list = multipleSelect.value.map(params => {
-    const paramsStr = ['ipAddress', 'aesKey', 'loginKey'].includes(item.prop) ? 'dataStr' : 'data'
+  const list = multipleSelect.value.map((params) => {
+    const paramsStr = ['ipAddress', 'aesKey', 'loginKey'].includes(item.prop)
+      ? 'dataStr'
+      : 'data'
     return {
       deviceSn: params.deviceSn,
       cmdCode: item.cmdCode,
@@ -725,6 +770,14 @@ const issueClick = async (item) => {
     issueVisible.value = false
     proxy.$modal.msgSuccess('操作成功')
     getList()
+  }
+}
+
+const importRef = ref(null)
+const importUrl = computed(() => import.meta.env.VITE_APP_BASE_API + '/biz/device/import')
+const handleImport = () => {
+  if (importRef.value) {
+    importRef.value.show()
   }
 }
 
