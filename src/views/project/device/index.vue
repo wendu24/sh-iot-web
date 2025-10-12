@@ -80,6 +80,9 @@
         <template #default="{ row }">
           <template v-if="row.deviceType === 20 || row.deviceType === 40">
             <el-form label-position="left" inline class="demo-table-expand">
+              <el-form-item label="数据采集时间">
+                <span>{{ informations.collectionTime }}</span>
+              </el-form-item>
               <el-form-item label="电池电量">
                 <span>{{ informations.batteryLevel }}</span>
               </el-form-item>
@@ -112,13 +115,14 @@
                   abnormalTypeTableDesc(informations.abnormalTypes)
                 }}</span>
               </el-form-item>
-              <el-form-item label="数据采集时间">
-                <span>{{ informations.collectionTime }}</span>
-              </el-form-item>
+              
             </el-form>
           </template>
           <template v-if="row.deviceType === 30">
             <el-form label-position="left" inline class="demo-table-expand">
+              <el-form-item label="数据采集时间">
+                <span>{{ informations.collectTime }}</span>
+              </el-form-item>
               <el-form-item label="设备版本">
                 <span>{{ informations.deviceVersion }}</span>
               </el-form-item>
@@ -126,7 +130,7 @@
                 <span>{{ informations.batteryLevel }}</span>
               </el-form-item>
               <el-form-item label="数据上报周期">
-                <span>{{ informations.uplinkPeriod }}(分钟)</span>
+                <span>{{ informations.reportPeriod }}(分钟)</span>
               </el-form-item>
               <el-form-item label="信号强度">
                 <span>{{ informations.signalStrength }}</span>
@@ -142,31 +146,32 @@
                   abnormalTypeTableDesc(informations.abnormalTypes)
                 }}</span>
               </el-form-item>
-              <el-form-item label="数据采集时间">
-                <span>{{ informations.collectionTime }}</span>
-              </el-form-item>
+              
             </el-form>
           </template>
           <template v-if="row.deviceType === 10">
             <el-form label-position="left" inline class="demo-table-expand">
+              <el-form-item label="数据采集时间">
+                <span>{{ informations.collectionTime }}</span>
+              </el-form-item>
               <el-form-item label="电池电量">
                 <span>{{ informations.batteryLevel }}</span>
               </el-form-item>
               <el-form-item label="信号强度">
                 <span>{{ informations.signalStrength }}</span>
               </el-form-item>
-              <el-form-item label="设备序列号">
-                <span>{{ informations.deviceSn }}</span>
+              <el-form-item label="异常类型">
+                <span>{{
+                  abnormalTypeTableDesc(informations.abnormalTypes)
+                }}</span>
               </el-form-item>
-              <el-form-item label="数据采集时间">
-                <span>{{ informations.collectionTime }}</span>
-              </el-form-item>
+              
             </el-form>
           </template>
         </template>
       </el-table-column>
       <el-table-column label="设备序列号" prop="deviceSn" width="180" />
-      <el-table-column label="设备位置" prop="position" width="130" />
+      
       <el-table-column label="设备类型" prop="deviceType" width="130">
         <template #default="{ row }">
           <span>{{ deviceTypeTableDesc(row.deviceType) }}</span>
@@ -179,6 +184,7 @@
         width="130"
       />
       <el-table-column label="小区名称" prop="communityName" width="150" />
+      <el-table-column label="楼栋单元" prop="position" width="130" />
       <el-table-column label="IP地址" prop="ipAddress" min-width="200">
         <template #default="{ row }">
           <div class="table-edit-wrapper">
@@ -667,7 +673,7 @@ const getCommunityLists = async () => {
 }
 
 const onTableClick = async (row, key, readWriteFlag, params, cmdCode) => {
-  if (!row[key]) {
+  if (!row[key] && readWriteFlag == 1) {
     return proxy.$modal.msgWarning('请输入值再操作！')
   }
   const postValue = {
@@ -802,19 +808,24 @@ onMounted(() => {
 
   .demo-table-expand {
     padding-left: 30px;
-    max-width: 600px;
+    max-width: 1000px;
 
     .el-form-item {
-      width: 32%;
+      width: 17%;
       margin-bottom: 0;
       margin-right: 2px;
 
-      &:nth-last-child(2) {
+
+      &:first-child {
         width: 100%;
       }
+      // &:nth-last-child(2) {
+      //   width: 100%;
+      // }
 
       &:last-child {
         width: 100%;
+        color: #e90b0b;
       }
     }
   }

@@ -52,19 +52,22 @@
 
     <!-- 表格数据 -->
     <el-table v-loading="loading" :data="communityList">
-      <el-table-column label="名称" prop="name" min-width="150" />
+      <el-table-column label="编号" prop="code"  min-width="15%"/>
+      <el-table-column label="名称" prop="name"  min-width="18%" />
       <el-table-column
         label="地址"
         prop="address"
         :show-overflow-tooltip="true"
-        min-width="150"
+        min-width="25%" 
       />
-      <el-table-column label="管理员" prop="manager" width="150" />
-      <el-table-column label="电话" prop="phone" width="130" />
-      <el-table-column label="位置" align="location" width="150" />
+      <el-table-column label="管理员" prop="manager" min-width="10%" />
+      <el-table-column label="电话" prop="phone"  min-width="12%" />
+      <el-table-column label="创建时间" prop="createTime" min-width="15%"  />
+      <el-table-column label="修改时间" prop="updateTime" min-width="15%"  />
       <el-table-column
         label="操作"
         align="center"
+         min-width="10%"
         class-name="small-padding fixed-width"
       >
         <template #default="scope">
@@ -204,6 +207,7 @@ function handleUpdate(row) {
   form.value = {
     id: row.id,
     name: row.name,
+    code:row.code,
     address: row.address,
     phone: row.phone,
     manager: row.manager,
