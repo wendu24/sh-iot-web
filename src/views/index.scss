@@ -14,7 +14,9 @@
 
     .top-title {
       position: absolute;
-      width: 26%;
+      /* Adjusted to be more flexible */
+      width: 40%; 
+      max-width: 400px;
       left: 50%;
       top: 40%;
       transform: translate(-50%, -50%);
@@ -31,26 +33,40 @@
     padding: 8px 23px 0;
     display: flex;
     align-items: center;
+    flex-wrap: wrap; 
 
     .img-aborn {
       width: 59px;
       margin-right: 12px;
+      flex-shrink: 0;
     }
 
     :deep(.el-form) {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+
       .el-form-item {
-        margin-bottom: 0px;
+        margin-bottom: 8px;
         margin-right: 7px;
 
         .el-form-item__label {
           color: #c9eaff;
           font-size: 15px;
           padding-right: 8px;
+          flex-shrink: 0;
         }
 
         .el-select {
-          width: 245px;
+          /* Adjusted width for flexibility */
+          width: 200px;
+          min-width: 150px;
+          flex-grow: 1;
 
+          @media (min-width: 1200px) {
+            width: 245px;
+          }
+          
           .el-select__wrapper {
             background-color: #0e2f46;
             border-radius: 5px;
@@ -80,6 +96,7 @@
           margin-right: 9px;
           color: #fff;
           cursor: pointer;
+          flex-shrink: 0;
 
           .btn-img {
             width: 100%;
@@ -109,16 +126,50 @@
 
   .home-card-container {
     padding: 23px 23px 19px;
+    display: flex;
+    /* 允许换行，但因为宽度计算，只有在空间不足时才会换行 */
+    flex-wrap: wrap; 
+    /* 使用 justify-content: space-between 来处理间距 */
+    justify-content: space-between; 
+    /* 确保容器有足够的空间，防止 flex-grow 挤压 */
+    min-width: 100%; 
+    box-sizing: border-box;
 
     .card-item-warpper {
       position: relative;
-      width: 310px;
+      /* 核心修改：计算 5 个卡片和 4 个 25px 间距的宽度 */
+      /* 100% = 5W + 4 * 25px  =>  W = (100% - 100px) / 5 */
+      width: calc((100% - 100px) / 5);
+      min-width: 200px; /* 最小宽度，防止在小屏幕上挤压过度 */
       min-height: 153px;
       box-sizing: border-box;
       padding-left: 30px;
-      margin-right: 25px;
+      /* 移除右侧固定 margin，由父容器的 space-between 负责 */
+      margin-right: 0; 
       display: inline-flex;
       align-items: center;
+
+      /* 只有一行 5 个元素，所以最后一个元素不需要特殊处理 margin-right */
+      &:last-child {
+        margin-right: 0;
+      }
+
+      /* 强制在一行显示 5 个卡片。当屏幕小于某个阈值时，布局可能会溢出，但符合“不换列”的要求 */
+      @media (max-width: 1200px) {
+        width: 310px; /* 小屏幕上固定宽度，让用户横向滚动或溢出 */
+        margin-bottom: 15px; /* 添加垂直间距 */
+        /* 使用 margin-right 来分隔固定宽度的卡片 */
+        margin-right: 25px; 
+      }
+      
+      /* 重置最后一个元素的边距，以防固定宽度布局时的溢出问题 */
+      &:nth-child(5n) { 
+         margin-right: 0;
+      }
+      &:nth-child(5n + 1) { 
+         clear: left; 
+      }
+
 
       .card-bg {
         position: absolute;
@@ -129,14 +180,13 @@
         z-index: 8;
       }
 
-      &:last-child {
-        margin-right: 0;
-      }
-
       .card-img {
         z-index: 10;
-        width: 140px;
-        height: 140px;
+        /* Made image size more flexible */
+        width: 35%;
+        height: auto;
+        max-width: 140px;
+        max-height: 140px;
         margin-right: 16px;
       }
 
@@ -162,7 +212,7 @@
 
           span:last-child {
             font-size: 15px;
-            color: #C9EAFF;
+            color: #c9eaff;
             margin-left: 3px;
           }
         }
@@ -172,13 +222,9 @@
           flex-direction: column;
 
           span {
-            color: #C9EAFF;
+            color: #c9eaff;
             font-size: 12px;
             margin-bottom: 2px;
-
-            &:nth-child(even) {
-              margin-right: 0 !important;
-            }
           }
         }
       }
@@ -188,16 +234,25 @@
   .echarts-wrapper {
     padding: 0 23px;
     display: flex;
-    align-items: center;
     flex-wrap: wrap;
+    /* 使用 flex-start 或 space-between 来控制图表间距 */
+    justify-content: flex-start;
+    box-sizing: border-box;
 
     .echarts-item {
       position: relative;
       box-sizing: border-box;
-      width: 32.3%;
+      /* 核心修改：计算 3 个图表和 2 个 16px 间距的宽度 */
+      /* 100% = 3W + 2 * 16px  =>  W = (100% - 32px) / 3 */
+      width: calc((100% - 32px) / 3);
+      min-height: 300px;
       margin-right: 16px;
       margin-bottom: 20px;
-      min-height: 300px;
+      
+      /* 确保每行第三个元素（3n）没有右边距 */
+      &:nth-child(3n) {
+          margin-right: 0;
+      }
 
       .echarts-bg {
         position: absolute;
@@ -212,7 +267,7 @@
         position: relative;
         top: 30px;
         height: 36px;
-        
+
         .title-icon {
           position: absolute;
           left: 0;
@@ -234,8 +289,11 @@
       .echart {
         position: relative;
         z-index: 10;
+        /* Ensure chart fills its container */
+        width: 100%;
+        height: 100%;
+        min-height: 240px; /* Maintain minimum height */
       }
     }
   }
-
 }
