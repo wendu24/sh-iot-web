@@ -178,3 +178,16 @@ aside {
     margin-bottom: 10px;
   }
 }
+
+.custom-select-dropdown {
+  background-color: #0E2F46 !important;
+  border-color: #0E2F46 !important;
+
+  .el-select-dropdown__item {
+    color: #00daee;
+
+    &:hover {
+      background-color: #759497;
+    }
+  }
+}

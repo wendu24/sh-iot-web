@@ -1,12 +1,13 @@
 .home-container {
   position: relative;
-  background-image: url('@/assets/home/home_bg.svg');
+  background-image: url("@/assets/home/home_bg.svg");
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center center;
   background-attachment: fixed;
   height: calc(100vh - 84px);
   width: 100%;
+  overflow-y: auto;
 
   .top-info-container {
     position: relative;
@@ -42,7 +43,7 @@
         margin-right: 7px;
 
         .el-form-item__label {
-          color: #C9EAFF;
+          color: #c9eaff;
           font-size: 15px;
           padding-right: 8px;
         }
@@ -51,13 +52,13 @@
           width: 245px;
 
           .el-select__wrapper {
-            background-color: #0E2F46;
+            background-color: #0e2f46;
             border-radius: 5px;
             border: 1px solid #244961;
             box-shadow: none;
 
             &:hover {
-              border-color: #00DAEE;
+              border-color: #00daee;
             }
 
             .el-select__selected-item {
@@ -66,7 +67,7 @@
 
             .el-select__suffix {
               .el-icon {
-                color: #00DAEE;
+                color: #00daee;
               }
             }
           }
@@ -99,7 +100,7 @@
           }
 
           &:hover {
-            color: #00DAEE !important;
+            color: #00daee !important;
           }
         }
       }
@@ -107,15 +108,17 @@
   }
 
   .home-card-container {
-    padding: 0 23px;
-    display: flex;
-    align-items: center;
+    padding: 23px 23px 19px;
 
     .card-item-warpper {
       position: relative;
-      width: 20%;
-      padding-right: 25px;
-      min-height: 150px;
+      width: 310px;
+      min-height: 153px;
+      box-sizing: border-box;
+      padding-left: 30px;
+      margin-right: 25px;
+      display: inline-flex;
+      align-items: center;
 
       .card-bg {
         position: absolute;
@@ -123,14 +126,116 @@
         height: 100%;
         left: 0;
         top: 0;
-        z-index: 123;
+        z-index: 8;
       }
 
       &:last-child {
         margin-right: 0;
       }
+
+      .card-img {
+        z-index: 10;
+        width: 140px;
+        height: 140px;
+        margin-right: 16px;
+      }
+
+      .card-text-wrapper {
+        flex: 1;
+        z-index: 10;
+
+        .card-title {
+          color: #c9eaff;
+          font-size: 18px;
+          margin-bottom: 7px;
+        }
+
+        .card-desc {
+          span:first-child {
+            background: linear-gradient(90deg, #eaffff 0%, #5affff 100%);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            font-size: 40px;
+            font-weight: 600;
+          }
+
+          span:last-child {
+            font-size: 15px;
+            color: #C9EAFF;
+            margin-left: 3px;
+          }
+        }
+
+        .card-right-wrapper {
+          display: flex;
+          flex-direction: column;
+
+          span {
+            color: #C9EAFF;
+            font-size: 12px;
+            margin-bottom: 2px;
+
+            &:nth-child(even) {
+              margin-right: 0 !important;
+            }
+          }
+        }
+      }
     }
   }
 
+  .echarts-wrapper {
+    padding: 0 23px;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+
+    .echarts-item {
+      position: relative;
+      box-sizing: border-box;
+      width: 32.3%;
+      margin-right: 16px;
+      margin-bottom: 20px;
+      min-height: 300px;
+
+      .echarts-bg {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 8;
+      }
+
+      .title-wrapper {
+        position: relative;
+        top: 30px;
+        height: 36px;
+        
+        .title-icon {
+          position: absolute;
+          left: 0;
+          top: 0;
+          z-index: 8;
+          width: 100%;
+          height: 100%;
+        }
+
+        span {
+          position: relative;
+          font-size: 18px;
+          color: #fff;
+          z-index: 10;
+          margin-left: 92px;
+        }
+      }
+
+      .echart {
+        position: relative;
+        z-index: 10;
+      }
+    }
+  }
 
 }
