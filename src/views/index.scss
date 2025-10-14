@@ -1,0 +1,136 @@
+.home-container {
+  position: relative;
+  background-image: url('@/assets/home/home_bg.svg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center center;
+  background-attachment: fixed;
+  height: calc(100vh - 84px);
+  width: 100%;
+
+  .top-info-container {
+    position: relative;
+
+    .top-title {
+      position: absolute;
+      width: 26%;
+      left: 50%;
+      top: 40%;
+      transform: translate(-50%, -50%);
+      z-index: 11;
+    }
+
+    .top-bg {
+      width: 100%;
+      margin-top: -10px;
+    }
+  }
+
+  .home-search-container {
+    padding: 8px 23px 0;
+    display: flex;
+    align-items: center;
+
+    .img-aborn {
+      width: 59px;
+      margin-right: 12px;
+    }
+
+    :deep(.el-form) {
+      .el-form-item {
+        margin-bottom: 0px;
+        margin-right: 7px;
+
+        .el-form-item__label {
+          color: #C9EAFF;
+          font-size: 15px;
+          padding-right: 8px;
+        }
+
+        .el-select {
+          width: 245px;
+
+          .el-select__wrapper {
+            background-color: #0E2F46;
+            border-radius: 5px;
+            border: 1px solid #244961;
+            box-shadow: none;
+
+            &:hover {
+              border-color: #00DAEE;
+            }
+
+            .el-select__selected-item {
+              color: #fff;
+            }
+
+            .el-select__suffix {
+              .el-icon {
+                color: #00DAEE;
+              }
+            }
+          }
+        }
+
+        .btn {
+          position: relative;
+          width: 113px;
+          height: 33px;
+          margin-right: 9px;
+          color: #fff;
+          cursor: pointer;
+
+          .btn-img {
+            width: 100%;
+            height: 100%;
+          }
+
+          .btn-text {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 12px;
+            z-index: 111;
+          }
+
+          &:last-child {
+            margin-right: 0;
+          }
+
+          &:hover {
+            color: #00DAEE !important;
+          }
+        }
+      }
+    }
+  }
+
+  .home-card-container {
+    padding: 0 23px;
+    display: flex;
+    align-items: center;
+
+    .card-item-warpper {
+      position: relative;
+      width: 20%;
+      padding-right: 25px;
+      min-height: 150px;
+
+      .card-bg {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        left: 0;
+        top: 0;
+        z-index: 123;
+      }
+
+      &:last-child {
+        margin-right: 0;
+      }
+    }
+  }
+
+
+}

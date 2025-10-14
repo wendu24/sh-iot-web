@@ -1,48 +1,101 @@
 <template>
-  <div class="home-container">
-    <div class="top-info-container">
-      <img class="top-title" src="@/assets/home/home_top_title.svg" />
-      <img class="top-bg" src="@/assets/home/home_top_bg.svg" />
-    </div>
+  <div class="app-container home">
+    <el-form :inline="true" :model="form">
+      <el-form-item label="小区">
+        <el-select
+          v-model="form.communityIds"
+          multiple
+          filterable
+          collapse-tags
+          placeholder="请选择小区"
+          style="width: 220px"
+        >
+          <el-option
+            v-for="item of commuityList"
+            :label="item.name"
+            :key="item.id"
+            :value="item.id"
+          />
+        </el-select>
+      </el-form-item>
+      <el-form-item>
+        <el-button @click="onReset">重置</el-button>
+        <el-button type="primary" @click="onSubmit">查询</el-button>
+      </el-form-item>
+    </el-form>
 
-    <div class="home-search-container">
-      <img class="img-aborn" src="@/assets/home/home_aborn.svg" />
-      <el-form :inline="true" :model="form">
-        <el-form-item label="小区">
-          <el-select
-            v-model="form.communityIds"
-            multiple
-            filterable
-            collapse-tags
-            placeholder="请选择小区"
-          >
-            <el-option
-              v-for="item of commuityList"
-              :label="item.name"
-              :key="item.id"
-              :value="item.id"
-            />
-          </el-select>
-        </el-form-item>
-        <el-form-item>
-          <div class="btn btn-left" @click="onReset">
-            <img class="btn-img" src="@/assets/home/home_btn_reset.svg" />
-            <span class="btn-text">重置</span>
+    <div class="summary-info-wapper">
+      <div class="item">
+        <div class="item_left">
+          <img src="@/assets/home/community.svg" alt="" />
+        </div>
+        <div class="item_right">
+          <div class="item_right_title">小区</div>
+          <div class="item_right_desc">
+            <span>{{ overviews.communityNum }}</span>
+            <span>个</span>
           </div>
-          <div class="btn btn-right" @click="onSubmit">
-            <img class="btn-img" src="@/assets/home/home_btn_search.svg" />
-            <span class="btn-text">查询</span>
-          </div>
-          <!-- <el-button>重置</el-button>
-          <el-button type="primary" @click="onSubmit">查询</el-button> -->
-        </el-form-item>
-      </el-form>
-    </div>
-
-    <div class="home-card-container">
-      <div class="card-item-warpper">
-        <img class="card-bg" src="@/assets/home/home_card.svg" />
+        </div>
       </div>
+      <div class="item">
+        <div class="item_left">
+          <img src="@/assets/home/device.svg" alt="" />
+        </div>
+        <div class="item_right">
+          <div class="item_right_title">设备数</div>
+          <div class="item_right_wrapper">
+            <span v-for="item of deviceNums" :key="item.id"
+              >{{ item.name }}：{{ item.value }}个</span
+            >
+          </div>
+        </div>
+      </div>
+      <div class="item">
+        <div class="item_left">
+          <img src="@/assets/home/abnormal-device.svg" alt="" />
+        </div>
+        <div class="item_right">
+          <div class="item_right_title">异常设备</div>
+          <div class="item_right_wrapper">
+            <span v-for="item of abnormalDeviceNums" :key="item.id"
+              >{{ item.name }}：{{ item.value }}个</span
+            >
+          </div>
+        </div>
+      </div>
+      <div class="item">
+        <div class="item_left">
+          <img src="@/assets/home/temperature.svg" alt="" />
+        </div>
+        <div class="item_right">
+          <div class="item_right_title">平均室温</div>
+          <div class="item_right_desc">
+            <span>{{ overviews.avgRoomTemperature }}</span>
+            <span>°C</span>
+          </div>
+        </div>
+      </div>
+      <div class="item">
+        <div class="item_left">
+          <img src="@/assets/home/valve.svg" alt="" />
+        </div>
+        <div class="item_right">
+          <div class="item_right_title">平均阀门开度</div>
+          <div class="item_right_desc">
+            <span>{{ overviews.avgValvePosition }}</span>
+            <span>个</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="echarts-wrapper">
+      <div ref="chart1" class="chart" style="height: 300px"></div>
+      <div ref="chart6" class="chart" style="height: 300px"></div>
+      <div ref="chart2" class="chart" style="height: 300px"></div>
+      <div ref="chart3" class="chart" style="height: 300px"></div>
+      <div ref="chart4" class="chart" style="height: 300px"></div>
+      <div ref="chart5" class="chart" style="height: 300px"></div>
     </div>
   </div>
 </template>
@@ -470,4 +523,105 @@ onMounted(() => {
 })
 </script>
 
-<style scoped lang="scss" src="./index.scss"></style>
+<style scoped lang="scss">
+.home {
+  background-color: #f5f6f7;
+  min-height: calc(100vh - 84px);
+  box-sizing: border-box;
+
+  .el-form {
+    .el-form-item {
+      margin-bottom: 12px;
+    }
+  }
+
+  .summary-info-wapper {
+    display: flex;
+    align-items: flex-start;
+
+    .item {
+      display: flex;
+      align-items: center;
+      box-sizing: border-box;
+      padding: 16px;
+      width: 24%;
+      margin: 0.5%;
+      min-height: 150px;
+      box-shadow: 0px 8px 14px 0px rgba(55, 131, 136, 0.09);
+      background-color: #fff;
+      border-radius: 16px;
+
+      &:hover {
+        background-color: #f5f6f7;
+      }
+
+      .item_left {
+        width: 50px;
+        height: 50px;
+        margin: 0 20px;
+
+        img {
+          width: 100%;
+          height: 100%;
+        }
+      }
+
+      .item_right {
+        flex: 1;
+
+        .item_right_title {
+          color: #0b1019;
+          font-weight: 600;
+          font-size: 18px;
+          margin-bottom: 8px;
+        }
+
+        .item_right_desc {
+          span {
+            color: #0b1019;
+            font-size: 14px;
+
+            &:first-child {
+              font-size: 36px;
+              font-weight: 600;
+              margin-right: 4px;
+            }
+          }
+        }
+
+        .item_right_wrapper {
+          display: flex;
+          flex-direction: column;
+
+          span {
+            color: #0b1019;
+            font-size: 12px;
+            margin-right: 4px;
+            margin-bottom: 4px;
+
+            &:nth-child(even) {
+              margin-right: 0 !important;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .echarts-wrapper {
+    margin-top: 12px;
+    // padding-right: 16px;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+
+    .chart {
+      width: calc(50% - 16px);
+      margin: 8px;
+      background-color: #fff;
+      border-radius: 16px;
+      padding: 12px;
+    }
+  }
+}
+</style>
