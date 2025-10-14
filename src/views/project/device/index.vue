@@ -78,46 +78,6 @@
       <el-table-column type="selection" width="55" />
       <el-table-column type="expand">
         <template #default="{ row }">
-          <template v-if="row.deviceType === 20 || row.deviceType === 40">
-            <el-form label-position="left" inline class="demo-table-expand">
-              <el-form-item label="数据采集时间">
-                <span>{{ informations.collectionTime }}</span>
-              </el-form-item>
-              <el-form-item label="电池电量">
-                <span>{{ informations.batteryLevel }}</span>
-              </el-form-item>
-              <el-form-item label="数据上报周期">
-                <span>{{ informations.uplinkPeriod }}(分钟)</span>
-              </el-form-item>
-              <el-form-item label="阀门开度">
-                <span>{{ informations.valvePosition }}%</span>
-              </el-form-item>
-              <el-form-item label="阀门期望开度">
-                <span>{{ informations.targetValvePosition }}%</span>
-              </el-form-item>
-              <el-form-item label="回水温度">
-                <span>{{ informations.returnWaterTemperature }}°C</span>
-              </el-form-item>
-              <el-form-item label="目标回水温度">
-                <span>{{ informations.targetReturnWaterTemperature }}°C</span>
-              </el-form-item>
-              <el-form-item label="供水温度">
-                <span>{{ informations.supplyWaterTemperature }}°C</span>
-              </el-form-item>
-              <el-form-item label="供水压力">
-                <span>{{ informations.supplyWaterPressure }}</span>
-              </el-form-item>
-              <el-form-item label="回水压力">
-                <span>{{ informations.returnWaterPressure }}</span>
-              </el-form-item>
-              <el-form-item label="异常类型">
-                <span>{{
-                  abnormalTypeTableDesc(informations.abnormalTypes)
-                }}</span>
-              </el-form-item>
-              
-            </el-form>
-          </template>
           <template v-if="row.deviceType === 30">
             <el-form label-position="left" inline class="demo-table-expand">
               <el-form-item label="数据采集时间">
@@ -149,7 +109,7 @@
               
             </el-form>
           </template>
-          <template v-if="row.deviceType === 10">
+          <template v-else-if="row.deviceType === 10">
             <el-form label-position="left" inline class="demo-table-expand">
               <el-form-item label="数据采集时间">
                 <span>{{ informations.collectionTime }}</span>
@@ -159,6 +119,46 @@
               </el-form-item>
               <el-form-item label="信号强度">
                 <span>{{ informations.signalStrength }}</span>
+              </el-form-item>
+              <el-form-item label="异常类型">
+                <span>{{
+                  abnormalTypeTableDesc(informations.abnormalTypes)
+                }}</span>
+              </el-form-item>
+              
+            </el-form>
+          </template>
+          <template v-else>
+            <el-form label-position="left" inline class="demo-table-expand">
+              <el-form-item label="数据采集时间">
+                <span>{{ informations.collectionTime }}</span>
+              </el-form-item>
+              <el-form-item label="电池电量">
+                <span>{{ informations.batteryLevel }}</span>
+              </el-form-item>
+              <el-form-item label="数据上报周期">
+                <span>{{ informations.uplinkPeriod }}(分钟)</span>
+              </el-form-item>
+              <el-form-item label="阀门开度">
+                <span>{{ informations.valvePosition }}%</span>
+              </el-form-item>
+              <el-form-item label="阀门期望开度">
+                <span>{{ informations.targetValvePosition }}%</span>
+              </el-form-item>
+              <el-form-item label="回水温度">
+                <span>{{ informations.returnWaterTemperature }}°C</span>
+              </el-form-item>
+              <el-form-item label="目标回水温度">
+                <span>{{ informations.targetReturnWaterTemperature }}°C</span>
+              </el-form-item>
+              <el-form-item label="供水温度">
+                <span>{{ informations.supplyWaterTemperature }}°C</span>
+              </el-form-item>
+              <el-form-item label="供水压力">
+                <span>{{ informations.supplyWaterPressure }}</span>
+              </el-form-item>
+              <el-form-item label="回水压力">
+                <span>{{ informations.returnWaterPressure }}</span>
               </el-form-item>
               <el-form-item label="异常类型">
                 <span>{{
@@ -768,7 +768,9 @@ const handleIssue = () => {
   issueVisible.value = true
   issueValueList.value.forEach((item) => {
     const index = multipleSelect.value.findIndex((s) => s[item.prop])
-    item[item.prop] = multipleSelect.value[index][item.prop]
+    if (index >= 0) {
+      item[item.prop] = multipleSelect.value[index][item.prop]
+    }
   })
 }
 const issueClick = async (item) => {
