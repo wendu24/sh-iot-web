@@ -45,6 +45,28 @@ export function refreshMethod(data) {
   });
 }
 
+
+// 刷新设备
+export function refreshMethodCache(data) {
+  return request({
+    url: "/biz/device/refresh-cache",
+    method: "post",
+    data,
+  });
+}
+
+
+
+// 修改其他信息
+export function editOtherInfoMethodCache(data) {
+  return request({
+    url: "/biz/device/public-msg-cache",
+    method: "post",
+    data,
+  });
+}
+
+
 // 修改其他信息
 export function editOtherInfoMethod(data) {
   return request({

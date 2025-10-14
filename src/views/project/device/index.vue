@@ -39,7 +39,7 @@
           plain
           icon="Refresh"
           v-hasPermi="['project:device:refresh']"
-          @click="handleRefresh(multipleSelect)"
+          @click="handleRefreshCache(multipleSelect)"
           >读取</el-button
         >
 
@@ -469,7 +469,9 @@ import {
   addMethod,
   editMethod,
   refreshMethod,
+  refreshMethodCache,
   editOtherInfoMethod,
+  editOtherInfoMethodCache,
   viewInfoMethod
 } from '@/api/project/device'
 import { getCommunityList } from '@/api/home'
@@ -596,6 +598,20 @@ async function handleRefresh(rows = []) {
   if (rows.length === 0)
     return proxy.$modal.msgWarning('请勾选数据，再执行操作')
   const res = await refreshMethod({
+    deviceSnList: rows.map((item) => item.deviceSn)
+  })
+  if (res.code === 200) {
+    proxy.$modal.msgSuccess('刷新成功')
+    getList()
+  }
+}
+
+
+/** 刷新 */
+async function handleRefreshCache(rows = []) {
+  if (rows.length === 0)
+    return proxy.$modal.msgWarning('请勾选数据，再执行操作')
+  const res = await refreshMethodCache({
     deviceSnList: rows.map((item) => item.deviceSn)
   })
   if (res.code === 200) {
@@ -771,7 +787,7 @@ const issueClick = async (item) => {
       [paramsStr]: item[item.prop]
     }
   })
-  const res = await editOtherInfoMethod(list)
+  const res = await editOtherInfoMethodCache(list)
   if (res.code === 200) {
     issueVisible.value = false
     proxy.$modal.msgSuccess('操作成功')
