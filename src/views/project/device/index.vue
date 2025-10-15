@@ -183,7 +183,7 @@
         :show-overflow-tooltip="true"
         width="130"
       />
-      <el-table-column label="小区名称" prop="communityName" width="150" />
+      <el-table-column label="项目名称" prop="communityName" width="150" />
       <el-table-column label="楼栋单元" prop="position" width="130" />
       <el-table-column label="IP地址" prop="ipAddress" min-width="200">
         <template #default="{ row }">
@@ -377,11 +377,11 @@
         <el-form-item label="dtu序列号" prop="dtuSn">
           <el-input v-model="form.dtuSn" />
         </el-form-item>
-        <el-form-item label="小区" prop="communityId">
+        <el-form-item label="所属项目" prop="communityId">
           <el-select
             v-model="form.communityId"
             filterable
-            placeholder="请选择小区"
+            placeholder="请选择项目"
           >
             <el-option
               v-for="item of commuityList"
@@ -527,7 +527,7 @@ const data = reactive({
     ],
     dtuSn: [{ required: true, message: 'dtu序列号不能为空', trigger: 'blur' }],
     communityId: [
-      { required: true, message: '小区不能为空', trigger: 'change' }
+      { required: true, message: '项目不能为空', trigger: 'change' }
     ]
   }
 })
@@ -643,7 +643,7 @@ function submitMethod() {
         (item) => item.id === form.value.communityId
       )?.name
       if (!communityName) {
-        return proxy.$modal.msgWarning('选择的小区不存在，请重新检查')
+        return proxy.$modal.msgWarning('选择的项目不存在，请重新检查')
       }
       dialogLoading.value = true
       const { code } = await method({ ...form.value, communityName }).catch(

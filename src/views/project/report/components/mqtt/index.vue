@@ -5,7 +5,7 @@
       <el-table-column label="设备编号" prop="deviceSn" min-width="180" />
       <el-table-column label="ICCID" prop="iccId" min-width="200" />
       <el-table-column
-        label="小区名称"
+        label="项目名称"
         prop="communityName"
         :show-overflow-tooltip="true"
         min-width="150"

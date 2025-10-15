@@ -16,8 +16,8 @@
           @keyup.enter="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="小区" prop="communityId">
-        <el-select v-model="queryParams.communityId" placeholder="请选择小区" clearable style="width: 240px">
+      <el-form-item label="项目名称" prop="communityId">
+        <el-select v-model="queryParams.communityId" placeholder="请选择项目" clearable style="width: 240px">
           <el-option v-for="dict of commuityList" :key="dict.id" :label="dict.name" :value="dict.id" />
         </el-select>
       </el-form-item>

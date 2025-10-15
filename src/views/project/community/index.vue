@@ -52,10 +52,10 @@
 
     <!-- 表格数据 -->
     <el-table v-loading="loading" :data="communityList">
-      <el-table-column label="编号" prop="code"  min-width="15%"/>
-      <el-table-column label="名称" prop="name"  min-width="18%" />
+      <el-table-column label="项目编号" prop="code"  min-width="15%"/>
+      <el-table-column label="项目名称" prop="name"  min-width="18%" />
       <el-table-column
-        label="地址"
+        label="项目地址"
         prop="address"
         :show-overflow-tooltip="true"
         min-width="25%" 
@@ -104,10 +104,10 @@
     <!-- 分配角色数据权限对话框 -->
     <el-dialog :title="title" v-model="visible" width="500px" append-to-body>
       <el-form ref="operateRef" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="名称" prop="name">
+        <el-form-item label="项目名称" prop="name">
           <el-input v-model="form.name" />
         </el-form-item>
-        <el-form-item label="地址" prop="address">
+        <el-form-item label="项目地址" prop="address">
           <el-input v-model="form.address" />
         </el-form-item>
         <el-form-item label="电话" prop="phone">
