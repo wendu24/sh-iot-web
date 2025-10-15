@@ -80,10 +80,16 @@ const { queryParams } = toRefs(data)
 
 /** 查询列表 */
 function getList(params = queryParams.value) {
+  if (params.page) {
+    params = {
+      pageNum: params.page,
+      pageSize: params.limit,
+      ...queryParams.value
+    }
+  }
   loading.value = true
   getUdpList(params).then((res) => {
-    queryParams.value.pageNum = params.pageNum
-    queryParams.value.pageSize = params.pageSize
+    queryParams.value = params
     udpList.value = res.records
     total.value = res.total
     loading.value = false
