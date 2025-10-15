@@ -8,14 +8,14 @@
     <div class="home-search-container">
       <img class="img-aborn" src="@/assets/home/home_aborn.svg" />
       <el-form :inline="true" :model="form">
-        <el-form-item label="小区">
+        <el-form-item label="项目">
           <el-select
             v-model="form.communityIds"
             popper-class="custom-select-dropdown"
             multiple
             filterable
             collapse-tags
-            placeholder="请选择小区"
+            placeholder="请选择项目"
           >
             <el-option
               v-for="item of commuityList"
@@ -43,7 +43,7 @@
         <img class="card-bg" src="@/assets/home/home_card.svg" />
         <img class="card-img" src="@/assets/home/community_2.svg" />
         <div class="card-text-wrapper">
-          <div class="card-title">小区</div>
+          <div class="card-title">项目</div>
           <div class="card-desc">
             <span>{{ overviews.communityNum }}</span>
             <span>个</span>
