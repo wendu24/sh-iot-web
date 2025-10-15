@@ -81,7 +81,7 @@
           <div class="card-title">平均室温</div>
           <div class="card-desc">
             <span>{{ overviews.avgRoomTemperature }}</span>
-            <span>个</span>
+            <span>°C</span>
           </div>
         </div>
       </div>
