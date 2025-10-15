@@ -152,477 +152,594 @@
 </template>
 
 <script setup name="Index">
-import * as echarts from "echarts";
-import { computed, reactive } from "vue";
-import useAppStore from "@/store/modules/app";
+import * as echarts from 'echarts'
+import { computed, reactive } from 'vue'
+import useAppStore from '@/store/modules/app'
 import {
   getCommunityList,
   getOverview,
   getRoomDataThirtyDays,
   getTop5TemperatureCommunity,
   getScatterChart,
-  getWaterTemperatureChart,
-} from "@/api/home";
-const commuityList = ref([]);
-const overviews = ref({});
+  getWaterTemperatureChart
+} from '@/api/home'
+const commuityList = ref([])
+const overviews = ref({})
 const form = reactive({
-  communityIds: [],
-});
+  communityIds: []
+})
 
-const chart1 = ref(null);
-const chart2 = ref(null);
-const chart3 = ref(null);
-const chart4 = ref(null);
-const chart5 = ref(null);
-const chart6 = ref(null);
+const chart1 = ref(null)
+const chart2 = ref(null)
+const chart3 = ref(null)
+const chart4 = ref(null)
+const chart5 = ref(null)
+const chart6 = ref(null)
 
 const deviceNums = computed(() => {
-  const list = [];
+  const list = []
   if (overviews.value.deviceTypeNum) {
     Object.keys(overviews.value.deviceTypeNum).forEach((item) => {
       if (useAppStore().$state.deviceTypeENUM[item]) {
         list.push({
           name: useAppStore().$state.deviceTypeENUM[item],
           value: overviews.value.deviceTypeNum[item],
-          id: Date.now(),
-        });
+          id: Date.now()
+        })
       }
-    });
+    })
   }
-  return list;
-});
+  return list
+})
 
 const abnormalDeviceNums = computed(() => {
   const obj = {
-    10: "拆卸告警",
-    20: "阀门堵转",
-    30: "传感器异常",
-    40: "按键报警触发",
-  };
-  const list = [];
+    10: '拆卸告警',
+    20: '阀门堵转',
+    30: '传感器异常',
+    40: '按键报警触发'
+  }
+  const list = []
   if (overviews.value.abnormalTypeNum) {
     Object.keys(overviews.value.abnormalTypeNum).forEach((item) => {
       if (obj[item]) {
         list.push({
           name: obj[item],
           value: overviews.value.abnormalTypeNum[item],
-          id: Date.now(),
-        });
+          id: Date.now()
+        })
       }
-    });
+    })
   }
-  return list;
-});
+  return list
+})
 
 const onReset = () => {
-  form.communityIds = [];
-};
+  form.communityIds = []
+}
 
 const onSubmit = () => {
-  getOverViewData();
-  getRoomDataThirtyDay();
-  getScatterData();
-  getWaterTemperatureData();
-};
+  getOverViewData()
+  getRoomDataThirtyDay()
+  getScatterData()
+  getWaterTemperatureData()
+}
 
 // 获取小区下拉列表
 const getCommunityLists = async () => {
   const res = await getCommunityList({
     pageNum: 1,
-    pageSize: 1000,
-  });
-  commuityList.value = res.records;
-};
+    pageSize: 1000
+  })
+  commuityList.value = res.records
+}
 
 // 获取数据概况
 const getOverViewData = async () => {
-  const res = await getOverview({ communityIds: form.communityIds });
-  overviews.value = res.data;
-};
+  const res = await getOverview({ communityIds: form.communityIds })
+  overviews.value = res.data
+}
 
 // 获取24小时小区室温加湿度数据
 const getRoomDataThirtyDay = async () => {
-  const res = await getRoomDataThirtyDays({ communityIds: form.communityIds });
+  const res = await getRoomDataThirtyDays({ communityIds: form.communityIds })
   const option = {
     tooltip: {
-      trigger: "axis",
+      trigger: 'axis',
       axisPointer: {
-        type: "cross", // 十字准星指示器，同时显示两个轴的数据
-      },
+        type: 'cross' // 十字准星指示器，同时显示两个轴的数据
+      }
     },
-    color: ["#17D9FF", "#4EFAE2"],
+    color: ['#17D9FF', '#4EFAE2'],
     legend: {
-      data: ["温度", "湿度"],
+      data: ['温度', '湿度'],
       bottom: 0,
       textStyle: {
-        color: "#fff",
-      },
+        color: '#fff'
+      }
     },
     grid: {
-      left: "4%",
-      right: "1%",
-      bottom: "16%",
-      containLabel: true,
+      left: '6%',
+      right: '2%',
+      bottom: '16%',
+      containLabel: true
     },
     xAxis: {
-      type: "category",
+      type: 'category',
       boundaryGap: false,
       axisLabel: {
         interval: 0,
         margin: 15,
-        color: "#fff",
+        color: '#fff'
       },
-      axisLine: {
+      splitLine: {
         show: true,
         lineStyle: {
-          color: "#234A7E",
-        },
+          color: '#234A7E',
+          type: 'solid'
+        }
       },
-      data: res.data.map((item) => item.hour),
+      data: res.data.map((item) => item.hour)
     },
     yAxis: [
       {
-        type: "value",
-        position: "left",
+        type: 'value',
+        position: 'left',
         alignTicks: true,
         axisLabel: {
-          formatter: "{value}°C",
-          color: "#fff",
-          lineHeight: 35,
+          formatter: '{value}°C',
+          color: '#fff',
+          lineHeight: 35
         },
-        axisLine: {
+        splitLine: {
           show: true,
           lineStyle: {
-            color: "#234A7E",
-          },
-        },
+            color: '#234A7E',
+            type: 'solid'
+          }
+        }
+        // axisLine: {
+        //   show: true,
+        //   lineStyle: {
+        //     color: "#234A7E",
+        //   },
+        // },
       },
       {
-        type: "value",
-        position: "right",
+        type: 'value',
+        position: 'right',
         alignTicks: true,
         axisLabel: {
           lineHeight: 35,
-          formatter: "{value} %RH",
-          color: "#fff",
+          formatter: '{value} %RH',
+          color: '#fff'
         },
-        axisLine: {
+        splitLine: {
           show: true,
           lineStyle: {
-            color: "#234A7E",
-          },
+            color: '#234A7E',
+            type: 'solid'
+          }
         },
-        startValue: 0,
-      },
+        startValue: 0
+      }
     ],
     series: [
       {
-        name: "温度",
-        type: "line",
+        name: '温度',
+        type: 'line',
         yAxisIndex: 0,
-        data: res.data.map((item) => item.avgRoomTemperature),
+        data: res.data.map((item) => item.avgRoomTemperature)
       },
       {
-        name: "湿度",
-        type: "line",
+        name: '湿度',
+        type: 'line',
         yAxisIndex: 1,
-        data: res.data.map((item) => item.avgRoomHumidity),
-      },
-    ],
-  };
-  const myChart1 = echarts.init(chart1.value);
-  myChart1.setOption(option);
-  window.addEventListener("resize", () => {
-    myChart1.resize();
-  });
-};
+        data: res.data.map((item) => item.avgRoomHumidity)
+      }
+    ]
+  }
+  const myChart1 = echarts.init(chart1.value)
+  myChart1.setOption(option)
+  window.addEventListener('resize', () => {
+    myChart1.resize()
+  })
+}
 
 // 获取前五及后五小区温度
 const getCommunityTemperature = async () => {
   const res = await getTop5TemperatureCommunity({
-    communityIds: form.communityIds,
-  });
+    communityIds: form.communityIds
+  })
   const option2 = {
     tooltip: {
-      trigger: "axis",
+      trigger: 'axis'
     },
     color: ['#0EC4E8', '#4EFAE2', '#F7C25B'],
     legend: {
-      data: ["平均室温", "平均供水水温", "平均供水水压"],
-      bottom: "10",
+      data: ['平均室温', '平均供水水温', '平均供水水压'],
+      bottom: '10',
       textStyle: {
-        color: "#fff",
-      },
+        color: '#fff'
+      }
+    },
+    grid: {
+      left: '6%',
+      right: '2%',
+      bottom: '16%',
+      containLabel: true
     },
     xAxis: {
-      type: "category",
+      type: 'category',
       axisLabel: {
-        color: "#fff",
-        lineHeight: 35,
+        color: '#fff',
+        lineHeight: 35
       },
-      data: res.data.top5.map((item) => item.communityName),
+      splitLine: {
+        show: true,
+        lineStyle: {
+          color: '#234A7E',
+          type: 'solid'
+        }
+      },
+      data: res.data.top5.map((item) => item.communityName)
     },
     yAxis: [
       {
-        type: "value",
+        type: 'value',
         alignTicks: true,
         axisLabel: {
-          formatter: "{value}°C",
+          formatter: '{value}°C',
           color: '#fff'
         },
+        splitLine: {
+          show: true,
+          lineStyle: {
+            color: '#234A7E',
+            type: 'solid'
+          }
+        }
       },
       {
-        type: "value",
+        type: 'value',
         alignTicks: true,
         axisLabel: {
-          formatter: "{value}MPa",
+          formatter: '{value}MPa',
           color: '#fff'
         },
-      },
+        splitLine: {
+          show: true,
+          lineStyle: {
+            color: '#234A7E',
+            type: 'solid'
+          }
+        }
+      }
     ],
     series: [
       {
-        name: "平均室温",
+        name: '平均室温',
         data: res.data.top5.map((item) => item.avgRoomTemperature),
-        type: "bar",
+        type: 'bar',
         yAxisIndex: 0,
         itemStyle: {
           barBorderRadius: [10, 10, 0, 0]
         }
       },
       {
-        name: "平均供水水温",
+        name: '平均供水水温',
         data: res.data.top5.map((item) => item.supplyWaterTemperature),
-        type: "bar",
+        type: 'bar',
         yAxisIndex: 0,
         itemStyle: {
           barBorderRadius: [10, 10, 0, 0]
         }
       },
       {
-        name: "平均供水水压",
+        name: '平均供水水压',
         data: res.data.top5.map((item) => item.supplyWaterPressure),
-        type: "bar",
+        type: 'bar',
         yAxisIndex: 1,
         itemStyle: {
           barBorderRadius: [10, 10, 0, 0]
         }
-      },
-    ],
-  };
+      }
+    ]
+  }
   const option3 = {
     color: ['#0EC4E8', '#4EFAE2', '#F7C25B'],
     tooltip: {
-      trigger: "axis",
+      trigger: 'axis'
     },
     legend: {
-      data: ["平均室温", "平均供水水温", "平均供水水压"],
-      bottom: "10",
+      data: ['平均室温', '平均供水水温', '平均供水水压'],
+      bottom: '10',
       textStyle: {
-        color: "#fff",
-      },
+        color: '#fff'
+      }
+    },
+    grid: {
+      left: '6%',
+      right: '2%',
+      bottom: '16%',
+      containLabel: true
     },
     xAxis: {
-      type: "category",
+      type: 'category',
       data: res.data.low5.map((item) => item.communityName),
       axisLabel: {
         color: '#fff'
       },
+      splitLine: {
+        show: true,
+        lineStyle: {
+          color: '#234A7E',
+          type: 'solid'
+        }
+      }
     },
     yAxis: [
       {
-        type: "value",
+        type: 'value',
         alignTicks: true,
         axisLabel: {
-          formatter: "{value}°C",
+          formatter: '{value}°C',
           color: '#fff'
         },
+        splitLine: {
+          show: true,
+          lineStyle: {
+            color: '#234A7E',
+            type: 'solid'
+          }
+        }
       },
       {
-        type: "value",
+        type: 'value',
         alignTicks: true,
         axisLabel: {
-          formatter: "{value}MPa",
+          formatter: '{value}MPa',
           color: '#fff'
         },
-      },
+        splitLine: {
+          show: true,
+          lineStyle: {
+            color: '#234A7E',
+            type: 'solid'
+          }
+        }
+      }
     ],
     series: [
       {
-        name: "平均室温",
+        name: '平均室温',
         data: res.data.low5.map((item) => item.avgRoomTemperature),
-        type: "bar",
+        type: 'bar',
         yAxisIndex: 0,
         itemStyle: {
           barBorderRadius: [10, 10, 0, 0]
         }
       },
       {
-        name: "平均供水水温",
+        name: '平均供水水温',
         data: res.data.low5.map((item) => item.supplyWaterTemperature),
-        type: "bar",
+        type: 'bar',
         yAxisIndex: 0,
         itemStyle: {
           barBorderRadius: [10, 10, 0, 0]
         }
       },
       {
-        name: "平均供水水压",
+        name: '平均供水水压',
         data: res.data.low5.map((item) => item.supplyWaterPressure),
-        type: "bar",
+        type: 'bar',
         yAxisIndex: 1,
         itemStyle: {
           barBorderRadius: [10, 10, 0, 0]
         }
-      },
-    ],
-  };
-  const myChart2 = echarts.init(chart2.value);
-  const myChart3 = echarts.init(chart3.value);
-  myChart2.setOption(option2);
-  myChart3.setOption(option3);
-  window.addEventListener("resize", () => {
-    myChart2.resize();
-    myChart3.resize();
-  });
-};
+      }
+    ]
+  }
+  const myChart2 = echarts.init(chart2.value)
+  const myChart3 = echarts.init(chart3.value)
+  myChart2.setOption(option2)
+  myChart3.setOption(option3)
+  window.addEventListener('resize', () => {
+    myChart2.resize()
+    myChart3.resize()
+  })
+}
 
 const getScatterData = async () => {
-  const res = await getScatterChart({ communityIds: form.communityIds });
+  const res = await getScatterChart({ communityIds: form.communityIds })
   const option4 = {
     color: ['#5AC1FF'],
+    grid: {
+      left: '6%',
+      right: '2%',
+      bottom: '16%',
+      containLabel: true
+    },
     xAxis: {
       axisLabel: {
         color: '#fff'
+      },
+      splitLine: {
+        show: true,
+        lineStyle: {
+          color: '#234A7E',
+          type: 'solid'
+        }
       }
     },
     yAxis: {
-      type: "value",
+      type: 'value',
       alignTicks: true,
       axisLabel: {
-        formatter: "{value}°C",
+        formatter: '{value}°C',
         color: '#fff'
       },
+      splitLine: {
+        show: true,
+        lineStyle: {
+          color: '#234A7E',
+          type: 'solid'
+        }
+      }
     },
     series: [
       {
         symbolSize: 10,
         data: res.data.map((item) => [
           item.avgValvePosition,
-          item.avgTemperature,
+          item.avgTemperature
         ]),
-        type: "scatter",
-      },
-    ],
-  };
+        type: 'scatter'
+      }
+    ]
+  }
   const option5 = {
     color: ['#5AC1FF'],
+    grid: {
+      left: '6%',
+      right: '2%',
+      bottom: '16%',
+      containLabel: true
+    },
     xAxis: {
       axisLabel: {
         color: '#fff'
+      },
+      splitLine: {
+        show: true,
+        lineStyle: {
+          color: '#234A7E',
+          type: 'solid'
+        }
       }
     },
     yAxis: {
-      type: "value",
+      type: 'value',
       alignTicks: true,
       axisLabel: {
-        formatter: "{value}°C",
+        formatter: '{value}°C',
         color: '#fff'
       },
+      splitLine: {
+        show: true,
+        lineStyle: {
+          color: '#234A7E',
+          type: 'solid'
+        }
+      }
     },
     series: [
       {
         symbolSize: 10,
         data: res.data.map((item) => [
           item.avgSupplyWaterTemperature,
-          item.avgTemperature,
+          item.avgTemperature
         ]),
-        type: "scatter",
-      },
-    ],
-  };
-  const myChart4 = echarts.init(chart4.value);
-  const myChart5 = echarts.init(chart5.value);
-  myChart4.setOption(option4);
-  myChart5.setOption(option5);
-  window.addEventListener("resize", () => {
-    myChart4.resize();
-    myChart5.resize();
-  });
-};
+        type: 'scatter'
+      }
+    ]
+  }
+  const myChart4 = echarts.init(chart4.value)
+  const myChart5 = echarts.init(chart5.value)
+  myChart4.setOption(option4)
+  myChart5.setOption(option5)
+  window.addEventListener('resize', () => {
+    myChart4.resize()
+    myChart5.resize()
+  })
+}
 
 const getWaterTemperatureData = async () => {
   const res = await getWaterTemperatureChart({
-    communityIds: form.communityIds,
-  });
+    communityIds: form.communityIds
+  })
   const option6 = {
     tooltip: {
-      trigger: "axis",
+      trigger: 'axis',
       axisPointer: {
-        type: "cross", // 十字准星指示器，同时显示两个轴的数据
-      },
+        type: 'cross' // 十字准星指示器，同时显示两个轴的数据
+      }
     },
-    color: ["#17D9FF", "#4EFAE2"],
+    color: ['#17D9FF', '#4EFAE2'],
     legend: {
       data: ['供水温度', '回水温度'],
       bottom: 0,
       textStyle: {
-        color: "#fff",
-      },
+        color: '#fff'
+      }
     },
     grid: {
-      left: "4%",
-      right: "3%",
-      bottom: "16%",
-      containLabel: true,
+      left: '6%',
+      right: '2%',
+      bottom: '16%',
+      containLabel: true
     },
     xAxis: {
-      type: "category",
+      type: 'category',
       boundaryGap: false,
       axisLabel: {
         interval: 0,
         margin: 15,
-        color: "#fff",
+        color: '#fff'
       },
-      data: res.data.map((item) => item.hour),
+      splitLine: {
+        show: true,
+        lineStyle: {
+          color: '#234A7E',
+          type: 'solid'
+        }
+      },
+      data: res.data.map((item) => item.hour)
     },
     yAxis: {
-      type: "value",
-      position: "left",
+      type: 'value',
+      position: 'left',
       alignTicks: true,
       axisLabel: {
-        formatter: "{value}°C",
-        color: "#fff",
+        formatter: '{value}°C',
+        color: '#fff'
       },
+      splitLine: {
+        show: true,
+        lineStyle: {
+          color: '#234A7E',
+          type: 'solid'
+        }
+      }
     },
     series: [
       {
-        name: "供水温度",
-        type: "line",
-        data: res.data.map((item) => item.avgSupplyWaterTemperature),
+        name: '供水温度',
+        type: 'line',
+        data: res.data.map((item) => item.avgSupplyWaterTemperature)
       },
       {
-        name: "回水温度",
-        type: "line",
-        data: res.data.map((item) => item.avgReturnWaterTemperature),
-      },
-    ],
-  };
-  const myChart6 = echarts.init(chart6.value);
-  myChart6.setOption(option6);
-  window.addEventListener("resize", () => {
-    myChart6.resize();
-  });
-};
+        name: '回水温度',
+        type: 'line',
+        data: res.data.map((item) => item.avgReturnWaterTemperature)
+      }
+    ]
+  }
+  const myChart6 = echarts.init(chart6.value)
+  myChart6.setOption(option6)
+  window.addEventListener('resize', () => {
+    myChart6.resize()
+  })
+}
 
 onMounted(() => {
-  getCommunityLists();
-  getOverViewData();
-  getRoomDataThirtyDay();
-  getCommunityTemperature();
-  getScatterData();
-  getWaterTemperatureData();
-});
+  getCommunityLists()
+  getOverViewData()
+  getRoomDataThirtyDay()
+  getCommunityTemperature()
+  getScatterData()
+  getWaterTemperatureData()
+})
 </script>
 
 <style scoped lang="scss" src="./index.scss"></style>

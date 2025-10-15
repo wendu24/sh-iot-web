@@ -15,7 +15,7 @@
     .top-title {
       position: absolute;
       /* Adjusted to be more flexible */
-      width: 40%; 
+      width: 40%;
       max-width: 400px;
       left: 50%;
       top: 40%;
@@ -32,10 +32,11 @@
   .home-search-container {
     padding: 8px 23px 0;
     display: flex;
-    align-items: center;
-    flex-wrap: wrap; 
+    align-items: flex-start;
+    flex-wrap: wrap;
 
     .img-aborn {
+      margin-top: 6px;
       width: 59px;
       margin-right: 12px;
       flex-shrink: 0;
@@ -66,7 +67,7 @@
           @media (min-width: 1200px) {
             width: 245px;
           }
-          
+
           .el-select__wrapper {
             background-color: #0e2f46;
             border-radius: 5px;
@@ -85,6 +86,16 @@
               .el-icon {
                 color: #00daee;
               }
+            }
+          }
+
+          .el-tag {
+            background-color: #0e2f46;
+            color: #fff;
+            border-color: #00daee;
+
+            .el-tag__close {
+              color: #00daee;
             }
           }
         }
@@ -125,14 +136,14 @@
   }
 
   .home-card-container {
-    padding: 23px 23px 19px;
+    padding: 0.6vw 23px 1vw;
     display: flex;
     /* 允许换行，但因为宽度计算，只有在空间不足时才会换行 */
-    flex-wrap: wrap; 
+    flex-wrap: wrap;
     /* 使用 justify-content: space-between 来处理间距 */
-    justify-content: space-between; 
+    justify-content: space-between;
     /* 确保容器有足够的空间，防止 flex-grow 挤压 */
-    min-width: 100%; 
+    min-width: 100%;
     box-sizing: border-box;
 
     .card-item-warpper {
@@ -141,11 +152,11 @@
       /* 100% = 5W + 4 * 25px  =>  W = (100% - 100px) / 5 */
       width: calc((100% - 100px) / 5);
       min-width: 200px; /* 最小宽度，防止在小屏幕上挤压过度 */
-      min-height: 153px;
+      min-height: 8vw;
       box-sizing: border-box;
       padding-left: 30px;
       /* 移除右侧固定 margin，由父容器的 space-between 负责 */
-      margin-right: 0; 
+      margin-right: 0;
       display: inline-flex;
       align-items: center;
 
@@ -159,17 +170,16 @@
         width: 310px; /* 小屏幕上固定宽度，让用户横向滚动或溢出 */
         margin-bottom: 15px; /* 添加垂直间距 */
         /* 使用 margin-right 来分隔固定宽度的卡片 */
-        margin-right: 25px; 
-      }
-      
-      /* 重置最后一个元素的边距，以防固定宽度布局时的溢出问题 */
-      &:nth-child(5n) { 
-         margin-right: 0;
-      }
-      &:nth-child(5n + 1) { 
-         clear: left; 
+        margin-right: 25px;
       }
 
+      /* 重置最后一个元素的边距，以防固定宽度布局时的溢出问题 */
+      &:nth-child(5n) {
+        margin-right: 0;
+      }
+      &:nth-child(5n + 1) {
+        clear: left;
+      }
 
       .card-bg {
         position: absolute;
@@ -196,7 +206,7 @@
 
         .card-title {
           color: #c9eaff;
-          font-size: 18px;
+          font-size: 1.2vw;
           margin-bottom: 7px;
         }
 
@@ -206,12 +216,12 @@
             background-clip: text;
             -webkit-background-clip: text;
             color: transparent;
-            font-size: 40px;
+            font-size: 2vw;
             font-weight: 600;
           }
 
           span:last-child {
-            font-size: 15px;
+            font-size: 0.8vw;
             color: #c9eaff;
             margin-left: 3px;
           }
@@ -223,7 +233,7 @@
 
           span {
             color: #c9eaff;
-            font-size: 12px;
+            font-size: 0.6vw;
             margin-bottom: 2px;
           }
         }
@@ -248,10 +258,10 @@
       min-height: 300px;
       margin-right: 16px;
       margin-bottom: 20px;
-      
+
       /* 确保每行第三个元素（3n）没有右边距 */
       &:nth-child(3n) {
-          margin-right: 0;
+        margin-right: 0;
       }
 
       .echarts-bg {
@@ -265,8 +275,9 @@
 
       .title-wrapper {
         position: relative;
-        top: 30px;
+        top: 1.5vw;
         height: 36px;
+        padding-left: 5vw;
 
         .title-icon {
           position: absolute;
@@ -279,10 +290,9 @@
 
         span {
           position: relative;
-          font-size: 18px;
+          font-size: 1vw;
           color: #fff;
           z-index: 10;
-          margin-left: 92px;
         }
       }
 
@@ -293,6 +303,9 @@
         width: 100%;
         height: 100%;
         min-height: 240px; /* Maintain minimum height */
+        display: flex;
+        align-items: center;
+        justify-content: center;
       }
     }
   }
