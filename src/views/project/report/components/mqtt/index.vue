@@ -110,6 +110,13 @@ const { queryParams } = toRefs(data)
 
 /** 查询列表 */
 function getList(params = queryParams.value) {
+   if (params.page) {
+    params = {
+      pageNum: params.page,
+      pageSize: params.limit,
+      ...queryParams.value
+    }
+  }
   loading.value = true
   getMqttList(params).then((res) => {
     queryParams.value.pageNum = params.pageNum
