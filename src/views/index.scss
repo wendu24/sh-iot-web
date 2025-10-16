@@ -140,11 +140,14 @@
     display: flex;
     /* 允许换行，但因为宽度计算，只有在空间不足时才会换行 */
     flex-wrap: wrap;
-    /* 使用 justify-content: space-between 来处理间距 */
-    justify-content: space-between;
+    
     /* 确保容器有足够的空间，防止 flex-grow 挤压 */
     min-width: 100%;
     box-sizing: border-box;
+
+    @media (min-width: 1258px) {
+      justify-content: space-between;
+    }
 
     .card-item-warpper {
       position: relative;
@@ -165,11 +168,10 @@
         margin-right: 0;
       }
 
-      /* 强制在一行显示 5 个卡片。当屏幕小于某个阈值时，布局可能会溢出，但符合“不换列”的要求 */
-      @media (max-width: 1200px) {
-        width: 310px; /* 小屏幕上固定宽度，让用户横向滚动或溢出 */
+      // /* 强制在一行显示 5 个卡片。当屏幕小于某个阈值时，布局可能会溢出，但符合“不换列”的要求 */
+      @media (max-width: 1258px) {
+        width: calc((100% - 100px) / 3);
         margin-bottom: 15px; /* 添加垂直间距 */
-        /* 使用 margin-right 来分隔固定宽度的卡片 */
         margin-right: 25px;
       }
 
@@ -260,11 +262,25 @@
       margin-bottom: 20px;
       display: flex;
       align-items: center;
+      justify-content: center;
       flex-direction: column;
 
-      /* 确保每行第三个元素（3n）没有右边距 */
-      &:nth-child(3n) {
-        margin-right: 0;
+      @media (max-width: 1000px) {
+        width: calc((100% - 32px) / 1);
+      }
+
+      @media screen and (min-width: 1000px) and (max-width: 1530px) {
+        width: calc((100% - 32px) / 2);
+        &:nth-child(2n) {
+          margin-right: 0;
+        }
+      }
+
+      @media (min-width: 1530px) {
+        /* 确保每行第三个元素（3n）没有右边距 */
+        &:nth-child(3n) {
+          margin-right: 0;
+        }
       }
 
       .echarts-bg {
@@ -278,7 +294,7 @@
 
       .title-wrapper {
         position: relative;
-        top: 1.5vw;
+        top: 0.6vw;
         height: 36px;
         width: 100%;
         max-width: 545px;
@@ -308,7 +324,7 @@
         width: 100%;
         height: 100%;
         max-width: 545px;
-        min-height: 240px; /* Maintain minimum height */
+        min-height: 200px; /* Maintain minimum height */
         display: flex;
         align-items: center;
         justify-content: center;

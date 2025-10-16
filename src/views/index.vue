@@ -105,7 +105,7 @@
           <img class="title-icon" src="@/assets/home/echart_title_bg.svg" />
           <span>近30天平均室温与湿度</span>
         </div>
-        <div ref="chart1" class="echart" style="height: 240px"></div>
+        <div ref="chart1" class="echart" style="height: 12.8vw"></div>
       </div>
       <div class="echarts-item">
         <img class="echarts-bg" src="@/assets/home/charts_bg.svg" />
@@ -113,7 +113,7 @@
           <img class="title-icon" src="@/assets/home/echart_title_bg.svg" />
           <span>近30天供水温度和回水温度</span>
         </div>
-        <div ref="chart6" class="echart" style="height: 240px"></div>
+        <div ref="chart6" class="echart" style="height: 12.8vw"></div>
       </div>
       <div class="echarts-item">
         <img class="echarts-bg" src="@/assets/home/charts_bg.svg" />
@@ -121,7 +121,7 @@
           <img class="title-icon" src="@/assets/home/echart_title_bg.svg" />
           <span>近30天室温较高小区</span>
         </div>
-        <div ref="chart2" class="echart" style="height: 240px"></div>
+        <div ref="chart2" class="echart" style="height: 12.8vw"></div>
       </div>
       <div class="echarts-item">
         <img class="echarts-bg" src="@/assets/home/charts_bg.svg" />
@@ -129,7 +129,7 @@
           <img class="title-icon" src="@/assets/home/echart_title_bg.svg" />
           <span>近30天室温较低小区</span>
         </div>
-        <div ref="chart3" class="echart" style="height: 240px"></div>
+        <div ref="chart3" class="echart" style="height: 12.8vw"></div>
       </div>
       <div class="echarts-item">
         <img class="echarts-bg" src="@/assets/home/charts_bg.svg" />
@@ -137,7 +137,7 @@
           <img class="title-icon" src="@/assets/home/echart_title_bg.svg" />
           <span>阀门与室温散点图</span>
         </div>
-        <div ref="chart4" class="echart" style="height: 240px"></div>
+        <div ref="chart4" class="echart" style="height: 12.8vw"></div>
       </div>
       <div class="echarts-item">
         <img class="echarts-bg" src="@/assets/home/charts_bg.svg" />
@@ -145,7 +145,7 @@
           <img class="title-icon" src="@/assets/home/echart_title_bg.svg" />
           <span>供水水温与室温散点图</span>
         </div>
-        <div ref="chart5" class="echart" style="height: 240px"></div>
+        <div ref="chart5" class="echart" style="height: 12.8vw"></div>
       </div>
     </div>
   </div>
@@ -259,16 +259,17 @@ const getRoomDataThirtyDay = async () => {
       }
     },
     grid: {
+      top: 24,
       left: '6%',
       right: '2%',
-      bottom: '16%',
+      bottom: '10%',
       containLabel: true
     },
     xAxis: {
       type: 'category',
       boundaryGap: false,
       axisLabel: {
-        interval: 0,
+        interval: 1,
         margin: 15,
         color: '#fff'
       },
@@ -364,6 +365,7 @@ const getCommunityTemperature = async () => {
       }
     },
     grid: {
+      top: 24,
       left: '6%',
       right: '2%',
       bottom: '16%',
@@ -373,7 +375,8 @@ const getCommunityTemperature = async () => {
       type: 'category',
       axisLabel: {
         color: '#fff',
-        lineHeight: 35
+        lineHeight: 35,
+        interval: 0,
       },
       splitLine: {
         show: true,
@@ -459,6 +462,7 @@ const getCommunityTemperature = async () => {
       }
     },
     grid: {
+      top: 24,
       left: '6%',
       right: '2%',
       bottom: '16%',
@@ -468,7 +472,8 @@ const getCommunityTemperature = async () => {
       type: 'category',
       data: res.data.low5.map((item) => item.communityName),
       axisLabel: {
-        color: '#fff'
+        color: '#fff',
+        interval: 0,
       },
       splitLine: {
         show: true,
@@ -555,6 +560,7 @@ const getScatterData = async () => {
   const option4 = {
     color: ['#5AC1FF'],
     grid: {
+      top: 24,
       left: '6%',
       right: '2%',
       bottom: '16%',
@@ -601,6 +607,7 @@ const getScatterData = async () => {
   const option5 = {
     color: ['#5AC1FF'],
     grid: {
+      top: 24,
       left: '6%',
       right: '2%',
       bottom: '16%',
@@ -674,6 +681,7 @@ const getWaterTemperatureData = async () => {
       }
     },
     grid: {
+      top: 24,
       left: '6%',
       right: '2%',
       bottom: '16%',
@@ -683,7 +691,7 @@ const getWaterTemperatureData = async () => {
       type: 'category',
       boundaryGap: false,
       axisLabel: {
-        interval: 0,
+        interval: 1,
         margin: 15,
         color: '#fff'
       },
