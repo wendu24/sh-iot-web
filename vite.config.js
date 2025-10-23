@@ -2,8 +2,8 @@ import { defineConfig, loadEnv } from 'vite'
 import path from 'path'
 import createVitePlugins from './vite/plugins'
 
-// const baseUrl = 'http://localhost:8089/sh-iot' // 后端接口
-const baseUrl = 'http://121.43.179.245:8089/sh-iot' // 后端接口
+const baseUrl = 'http://localhost:8089/sh-iot' // 后端接口
+// const baseUrl = 'http://121.43.179.245:8089/sh-iot' // 后端接口
 // const baseUrl = 'http://121.43.179.245:80/sh-iot' // 后端接口
 
 // https://vitejs.dev/config/

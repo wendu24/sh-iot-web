@@ -469,7 +469,7 @@ import {
   addMethod,
   editMethod,
   refreshMethod,
-  refreshMethodCache,
+  // refreshMethodCache,
   editOtherInfoMethod,
   editOtherInfoMethodCache,
   viewInfoMethod
@@ -611,7 +611,7 @@ async function handleRefresh(rows = []) {
 async function handleRefreshCache(rows = []) {
   if (rows.length === 0)
     return proxy.$modal.msgWarning('请勾选数据，再执行操作')
-  const res = await refreshMethodCache({
+  const res = await refreshMethod({
     deviceSnList: rows.map((item) => item.deviceSn)
   })
   if (res.code === 200) {

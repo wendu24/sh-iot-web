@@ -46,14 +46,14 @@ export function refreshMethod(data) {
 }
 
 
-// 刷新设备
-export function refreshMethodCache(data) {
-  return request({
-    url: "/biz/device/refresh-cache",
-    method: "post",
-    data,
-  });
-}
+// // 刷新设备
+// export function refreshMethodCache(data) {
+//   return request({
+//     url: "/biz/device/refresh-cache",
+//     method: "post",
+//     data,
+//   });
+// }
 
 
 
