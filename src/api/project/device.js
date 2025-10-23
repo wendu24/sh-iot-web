@@ -58,19 +58,19 @@ export function refreshMethod(data) {
 
 
 // 修改其他信息
-export function editOtherInfoMethodCache(data) {
-  return request({
-    url: "/biz/device/public-msg-cache",
-    method: "post",
-    data,
-  });
-}
+// export function editOtherInfoMethodCache(data) {
+//   return request({
+//     url: "/biz/device/public-msg-cache",
+//     method: "post",
+//     data,
+//   });
+// }
 
 
 // 修改其他信息
-export function editOtherInfoMethod(data) {
+export function editOtherInfoMethod(data, device = 'mqtt') {
   return request({
-    url: "/biz/device/public-msg",
+    url: `/biz/device/${device}/public-msg`,
     method: "post",
     data,
   });

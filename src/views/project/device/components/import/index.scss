@@ -5,13 +5,13 @@
       align-items: center;
       justify-content: center;
 
-      ::v-deep .el-upload {
+      :deep(.el-upload) {
         width: 452px;
         height: auto;
         background-color: #fafafa;
       }
 
-      ::v-deep .el-upload-dragger {
+      :deep(.el-upload-dragger) {
         width: 452px;
         height: auto;
         padding: 0;
