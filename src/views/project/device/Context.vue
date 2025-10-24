@@ -806,6 +806,9 @@ const data = reactive({
     deviceSn: [
       { required: true, message: '设备序列号不能为空', trigger: 'blur' }
     ],
+    version: [
+      { required: true, message: '设备协议版本不能为空', trigger: 'blur' }
+    ],
     deviceType: [
       { required: true, message: '设备不能为空', trigger: 'change' }
     ],

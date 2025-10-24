@@ -84,8 +84,10 @@
 
     <!-- 表格数据 -->
     <el-table v-loading="loading" :data="issueList">
-      <el-table-column label="设备序列号" prop="deviceSn" min-width="150" />
-      <el-table-column label="命令码" prop="cmdCode" width="120">
+      <el-table-column label="MID" prop="mid" min-width="50" />
+      <el-table-column label="设备序列号" prop="deviceSn" min-width="130" />
+      <el-table-column label="所属项目" prop="communityName" min-width="100" />
+      <el-table-column label="命令码" prop="cmdCode" width="150">
         <template #default="{ row }">
           <span>{{ cmdCodeDesc(row.cmdCode) }}</span>
         </template>
@@ -99,13 +101,13 @@
         label="下发数据"
         prop="publishData"
         :show-overflow-tooltip="true"
-        min-width="150"
+        min-width="130"
       />
       <el-table-column
         label="设备回复"
         prop="replyData"
         :show-overflow-tooltip="true"
-        min-width="150"
+        min-width="130"
       />
       <el-table-column label="发布时间" prop="publishTime" min-width="160" />
       <el-table-column label="回复时间" prop="replyTime" min-width="160" />
@@ -165,6 +167,13 @@ const cmdCodeList = ref([
   { value: 48, name: '阀门开度' },
   { value: 49, name: '目标回水温度' },
   { value: 50, name: '目标室温' },
+
+  { value: -32, name: '温度补偿模式"' },
+  { value: -31, name: '补偿设定时间1' },
+  { value: -30, name: '补偿设定时间2' },
+  { value: -29, name: '补偿设定时间3' },
+  { value: -28, name: '补偿设定功率1' },
+  { value: -27, name: '供热模式有效性' },
 ])
 const readOrWriteList = ref([
   { value: 0, name: '读取' },

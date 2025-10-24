@@ -26,14 +26,20 @@
       <el-table-column label="信号强度" prop="signalStrength" width="100" />
       <el-table-column label="采集时间" prop="collectTime" width="160" />
       <el-table-column
-        label="室内温度°C"
+        label="室内温度(°C)"
         prop="roomTemperature"
         width="130"
         :show-overflow-tooltip="true"
       />
       <el-table-column
-        label="室内湿度"
+        label="室内湿度(%)"
         prop="roomHumidity"
+        width="130"
+        :show-overflow-tooltip="true"
+      />
+         <el-table-column
+        label="当前功率(kW)"
+        prop="watt"
         width="130"
         :show-overflow-tooltip="true"
       />
