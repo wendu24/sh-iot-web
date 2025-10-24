@@ -96,29 +96,29 @@
           <template v-if="row.deviceType === 30">
             <el-form label-position="left" inline class="demo-table-expand">
               <el-form-item label="数据采集时间">
-                <span>{{ informations.collectTime }}</span>
+                <span>{{ informations[row.id]?.collectionTime }}</span>
               </el-form-item>
               <el-form-item label="设备版本">
-                <span>{{ informations.deviceVersion }}</span>
+                <span>{{ informations[row.id]?.deviceVersion }}</span>
               </el-form-item>
               <el-form-item label="电池电量">
-                <span>{{ informations.batteryLevel }}</span>
+                <span>{{ informations[row.id]?.batteryLevel }}</span>
               </el-form-item>
               <el-form-item label="数据上报周期">
-                <span>{{ informations.reportPeriod }}(分钟)</span>
+                <span>{{ informations[row.id]?.reportPeriod }}(分钟)</span>
               </el-form-item>
               <el-form-item label="信号强度">
-                <span>{{ informations.signalStrength }}</span>
+                <span>{{ informations[row.id]?.signalStrength }}</span>
               </el-form-item>
               <el-form-item label="室内温度">
-                <span>{{ informations.roomTemperature }}°C</span>
+                <span>{{ informations[row.id]?.roomTemperature }}°C</span>
               </el-form-item>
               <el-form-item label="室内湿度">
-                <span>{{ informations.roomHumidity }}</span>
+                <span>{{ informations[row.id]?.roomHumidity }}</span>
               </el-form-item>
               <el-form-item label="异常类型">
                 <span>{{
-                  abnormalTypeTableDesc(informations.abnormalTypes)
+                  abnormalTypeTableDesc(informations[row.id]?.abnormalTypes)
                 }}</span>
               </el-form-item>
             </el-form>
@@ -126,17 +126,17 @@
           <template v-else-if="row.deviceType === 10">
             <el-form label-position="left" inline class="demo-table-expand">
               <el-form-item label="数据采集时间">
-                <span>{{ informations.collectionTime }}</span>
+                <span>{{ informations[row.id]?.collectionTime }}</span>
               </el-form-item>
               <el-form-item label="电池电量">
-                <span>{{ informations.batteryLevel }}</span>
+                <span>{{ informations[row.id]?.batteryLevel }}</span>
               </el-form-item>
               <el-form-item label="信号强度">
-                <span>{{ informations.signalStrength }}</span>
+                <span>{{ informations[row.id]?.signalStrength }}</span>
               </el-form-item>
               <el-form-item label="异常类型">
                 <span>{{
-                  abnormalTypeTableDesc(informations.abnormalTypes)
+                  abnormalTypeTableDesc(informations[row.id]?.abnormalTypes)
                 }}</span>
               </el-form-item>
             </el-form>
@@ -144,38 +144,38 @@
           <template v-else>
             <el-form label-position="left" inline class="demo-table-expand">
               <el-form-item label="数据采集时间">
-                <span>{{ informations.collectionTime }}</span>
+                <span>{{ informations[row.id]?.collectionTime }}</span>
               </el-form-item>
               <el-form-item label="电池电量">
-                <span>{{ informations.batteryLevel }}</span>
+                <span>{{ informations[row.id]?.batteryLevel }}</span>
               </el-form-item>
               <el-form-item label="数据上报周期">
-                <span>{{ informations.uplinkPeriod }}(分钟)</span>
+                <span>{{ informations[row.id]?.uplinkPeriod }}(分钟)</span>
               </el-form-item>
               <el-form-item label="阀门开度">
-                <span>{{ informations.valvePosition }}%</span>
+                <span>{{ informations[row.id]?.valvePosition }}%</span>
               </el-form-item>
               <el-form-item label="阀门期望开度">
-                <span>{{ informations.targetValvePosition }}%</span>
+                <span>{{ informations[row.id]?.targetValvePosition }}%</span>
               </el-form-item>
               <el-form-item label="回水温度">
-                <span>{{ informations.returnWaterTemperature }}°C</span>
+                <span>{{ informations[row.id]?.returnWaterTemperature }}°C</span>
               </el-form-item>
               <el-form-item label="目标回水温度">
-                <span>{{ informations.targetReturnWaterTemperature }}°C</span>
+                <span>{{ informations[row.id]?.targetReturnWaterTemperature }}°C</span>
               </el-form-item>
               <el-form-item label="供水温度">
-                <span>{{ informations.supplyWaterTemperature }}°C</span>
+                <span>{{ informations[row.id]?.supplyWaterTemperature }}°C</span>
               </el-form-item>
               <el-form-item label="供水压力">
-                <span>{{ informations.supplyWaterPressure }}</span>
+                <span>{{ informations[row.id]?.supplyWaterPressure }}</span>
               </el-form-item>
               <el-form-item label="回水压力">
-                <span>{{ informations.returnWaterPressure }}</span>
+                <span>{{ informations[row.id]?.returnWaterPressure }}</span>
               </el-form-item>
               <el-form-item label="异常类型">
                 <span>{{
-                  abnormalTypeTableDesc(informations.abnormalTypes)
+                  abnormalTypeTableDesc(informations[row.id]?.abnormalTypes)
                 }}</span>
               </el-form-item>
             </el-form>
@@ -776,7 +776,7 @@ const deviceTypeList = computed(() => {
     })
 })
 const deviceTypeTableDesc = computed(() => (type) => deviceTypeENUM[type])
-const abnormalTypeTableDesc = computed(() => (type) => {
+const abnormalTypeTableDesc = computed(() => (type = '') => {
   const obj = {
     10: '拆卸告警',
     20: '阀门堵转',
@@ -1012,7 +1012,8 @@ const expandChangeMethod = async (row, expandedRows) => {
       40: `mqtt/${row.deviceSn}`
     }
     const res = await viewInfoMethod(urlObj[row.deviceType])
-    informations.value = res.data
+    informations.value[row.id] = res.data
+    
   }
 }
 
