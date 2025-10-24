@@ -341,6 +341,7 @@
                 v-model="row.temperatureCompensationMode"
                 filterable
                 placeholder="请选择"
+                :disabled="row.version !== '11'"
               >
                 <el-option
                   v-for="item of temperatureCompensationModeList"
@@ -379,7 +380,7 @@
         >
           <template #default="{ row }">
             <div class="table-edit-wrapper">
-              <el-input v-model="row.compensationTime1" />
+              <el-input v-model="row.compensationTime1" :disabled="row.version !== '11'" />
               <el-icon
                 @click="onTableClick(row, 'compensationTime1', 1, 'data', -31)"
               >
@@ -400,7 +401,7 @@
         >
           <template #default="{ row }">
             <div class="table-edit-wrapper">
-              <el-input v-model="row.compensationTime2" />
+              <el-input v-model="row.compensationTime2" :disabled="row.version !== '11'" />
               <el-icon
                 @click="onTableClick(row, 'compensationTime2', 1, 'data', -30)"
               >
@@ -421,7 +422,7 @@
         >
           <template #default="{ row }">
             <div class="table-edit-wrapper">
-              <el-input v-model="row.compensationTime3" />
+              <el-input v-model="row.compensationTime3" :disabled="row.version !== '11'" />
               <el-icon
                 @click="onTableClick(row, 'compensationTime3', 1, 'data', -29)"
               >
@@ -442,7 +443,7 @@
         >
           <template #default="{ row }">
             <div class="table-edit-wrapper">
-              <el-input v-model="row.compensationWatt1" />
+              <el-input v-model="row.compensationWatt1" :disabled="row.version !== '11'" />
               <el-icon
                 @click="onTableClick(row, 'compensationWatt1', 1, 'data', -28)"
               >
@@ -467,6 +468,7 @@
                 v-model="row.modeValidFlag"
                 filterable
                 placeholder="请选择"
+                :disabled="row.version !== '11'"
               >
                 <el-option
                   v-for="item of modeValidFlagList"
@@ -617,6 +619,7 @@
                 v-model="form.temperatureCompensationMode"
                 filterable
                 placeholder="请选择"
+                :disabled="form.version !== '11'"
               >
                 <el-option
                   v-for="item of temperatureCompensationModeList"
@@ -627,22 +630,23 @@
               </el-select>
           </el-form-item>
           <el-form-item label="补偿设定时间1" prop="compensationTime1">
-            <el-input v-model="form.compensationTime1" placeholder="请输入" />
+            <el-input v-model="form.compensationTime1":disabled="form.version !== '11'" placeholder="请输入" />
           </el-form-item>
           <el-form-item label="补偿设定时间2" prop="compensationTime2">
-            <el-input v-model="form.compensationTime2" placeholder="请输入" />
+            <el-input v-model="form.compensationTime2":disabled="form.version !== '11'" placeholder="请输入" />
           </el-form-item>
           <el-form-item label="补偿设定时间3" prop="compensationTime3">
-            <el-input v-model="form.compensationTime3" placeholder="请输入" />
+            <el-input v-model="form.compensationTime3":disabled="form.version !== '11'" placeholder="请输入" />
           </el-form-item>
           <el-form-item label="补偿设定功率1" prop="compensationWatt1">
-            <el-input v-model="form.compensationWatt1" placeholder="请输入" />
+            <el-input v-model="form.compensationWatt1":disabled="form.version !== '11'" placeholder="请输入" />
           </el-form-item>
           <el-form-item label="供热模式有效性标志" prop="modeValidFlag">
             <el-select
               v-model="form.modeValidFlag"
               filterable
               placeholder="请选择"
+              :disabled="form.version !== '11'"
             >
               <el-option
                 v-for="item of modeValidFlagList"
@@ -981,12 +985,16 @@ function reset() {
 }
 
 const onTableClick = async (row, key, readWriteFlag, params, cmdCode) => {
+  if (row.version !== '11' && active.value === 'udp')
+    return proxy.$modal.msgWarning('只有协议版本11才能修改')
+  
   if (
     (row[key] === undefined || row[key] === '' || row[key] === null) &&
     readWriteFlag == 1
   ) {
     return proxy.$modal.msgWarning('请输入值再操作！')
   }
+
   const postValue = {
     deviceSn: row.deviceSn,
     cmdCode,
@@ -1113,6 +1121,8 @@ const isFilterVailds = ref([])
 const handleIssue = () => {
   if (multipleSelect.value.length === 0)
     return proxy.$modal.msgWarning('请勾选数据，再执行操作')
+  if (multipleSelect.value.some(item => item.version !== '10') && active.value === 'udp')
+    return proxy.$modal.msgWarning('勾选的数据中，只有协议版本11才能修改')
   issueVisible.value = true
   issueValueList.value.forEach((item) => {
     const index = multipleSelect.value.findIndex((s) => s[item.prop])
