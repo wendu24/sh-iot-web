@@ -1121,10 +1121,11 @@ const isFilterVailds = ref([])
 const handleIssue = () => {
   if (multipleSelect.value.length === 0)
     return proxy.$modal.msgWarning('请勾选数据，再执行操作')
-  if (multipleSelect.value.some(item => item.version !== '10') && active.value === 'udp')
-    return proxy.$modal.msgWarning('勾选的数据中，只有协议版本11才能修改')
+  // if (multipleSelect.value.some(item => item.version !== '10') && active.value === 'udp')
+  //   return proxy.$modal.msgWarning('勾选的数据中，只有协议版本11才能修改')
   issueVisible.value = true
   issueValueList.value.forEach((item) => {
+    item[item.prop] = ''
     const index = multipleSelect.value.findIndex((s) => s[item.prop])
     if (index >= 0) {
       item[item.prop] = multipleSelect.value[index][item.prop]
