@@ -183,17 +183,18 @@
         </template>
       </el-table-column>
       <el-table-column label="设备序列号" prop="deviceSn" width="180" />
-      <el-table-column label="协议版本" prop="version" width="180" />
-      <el-table-column label="设备类型" prop="deviceType" width="130">
+      <el-table-column label="协议版本" prop="version" width="80" />
+      <el-table-column label="设备类型" prop="deviceType" width="100">
         <template #default="{ row }">
           <span>{{ deviceTypeTableDesc(row.deviceType) }}</span>
         </template>
       </el-table-column>
       <el-table-column
+        v-if="active === 'mqtt'"
         label="DTU序列号"
         prop="dtuSn"
         :show-overflow-tooltip="true"
-        width="130"
+        width="180"
       />
       <el-table-column label="项目名称" prop="communityName" width="150" />
       <el-table-column label="楼栋单元" prop="position" width="130" />
@@ -285,6 +286,7 @@
         </template>
       </el-table-column>
       <el-table-column
+        v-if="active === 'mqtt'"
         label="目标回水温度"
         prop="returnWaterTemperature"
         min-width="200"
@@ -308,7 +310,7 @@
         </template>
       </el-table-column>
       <el-table-column
-        v-if="active !== 'mqtt'"
+        v-if="active === 'mqtt'"
         label="目标室温"
         prop="roomTemperature"
         min-width="200"
@@ -547,7 +549,7 @@
           <el-select
             v-model="form.deviceType"
             filterable
-            placeholder="请选择设备"
+            placeholder="请选择设备类型"
           >
             <el-option
               v-for="item of deviceTypeList"
@@ -557,14 +559,14 @@
             />
           </el-select>
         </el-form-item>
-        <el-form-item label="dtu序列号" prop="dtuSn">
+        <el-form-item  v-if="active !== 'udp'" label="dtu序列号" prop="dtuSn">
           <el-input v-model="form.dtuSn" />
         </el-form-item>
         <el-form-item label="所属项目" prop="communityId">
           <el-select
             v-model="form.communityId"
             filterable
-            placeholder="请选择项目"
+            placeholder="请选择设备所属项目"
           >
             <el-option
               v-for="item of commuityList"
@@ -596,14 +598,14 @@
         >
           <el-input v-model="form.valvePosition" placeholder="请输入" />
         </el-form-item>
-        <el-form-item label="目标回水温度" prop="returnWaterTemperature">
+        <el-form-item v-if="active === 'mqtt'" label="目标回水温度" prop="returnWaterTemperature">
           <el-input
             v-model="form.returnWaterTemperature"
             placeholder="请输入"
           />
         </el-form-item>
         <el-form-item
-          v-if="active !== 'mqtt'"
+          v-if="active === 'mqtt'"
           label="目标室温"
           prop="roomTemperature"
         >
@@ -1212,6 +1214,9 @@ onMounted(() => {
       max-height: 600px !important;
       overflow-y: auto;
     }
+    .el-form-item{
+      width: 470px;
+    }
   }
 
   .input-wrapper-item {
@@ -1236,4 +1241,5 @@ onMounted(() => {
     }
   }
 }
+
 </style>
