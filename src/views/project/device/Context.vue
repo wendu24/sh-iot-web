@@ -17,20 +17,20 @@
         />
       </el-form-item>
       <el-form-item label="项目名称" prop="communityId">
-          <el-select
-            v-model="queryParams.communityId"
-            filterable
-            style="width: 240px"
-            placeholder="请选择项目名称"
-          >
-            <el-option
-              v-for="item of commuityList"
-              :label="item.name"
-              :key="item.id"
-              :value="item.id"
-            />
-          </el-select>
-        </el-form-item>
+        <el-select
+          v-model="queryParams.communityId"
+          filterable
+          style="width: 240px"
+          placeholder="请选择项目名称"
+        >
+          <el-option
+            v-for="item of commuityList"
+            :label="item.name"
+            :key="item.id"
+            :value="item.id"
+          />
+        </el-select>
+      </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="Search" @click="handleQuery"
           >搜索</el-button
@@ -121,7 +121,6 @@
                   abnormalTypeTableDesc(informations.abnormalTypes)
                 }}</span>
               </el-form-item>
-              
             </el-form>
           </template>
           <template v-else-if="row.deviceType === 10">
@@ -140,7 +139,6 @@
                   abnormalTypeTableDesc(informations.abnormalTypes)
                 }}</span>
               </el-form-item>
-              
             </el-form>
           </template>
           <template v-else>
@@ -180,7 +178,6 @@
                   abnormalTypeTableDesc(informations.abnormalTypes)
                 }}</span>
               </el-form-item>
-              
             </el-form>
           </template>
         </template>
@@ -269,7 +266,12 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column v-if="active !== 'udp'" label="阀门开度" prop="valvePosition" min-width="200">
+      <el-table-column
+        v-if="active !== 'udp'"
+        label="阀门开度"
+        prop="valvePosition"
+        min-width="200"
+      >
         <template #default="{ row }">
           <div class="table-edit-wrapper">
             <el-input v-model="row.valvePosition" />
@@ -305,7 +307,12 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column v-if="active !== 'mqtt'" label="目标室温" prop="roomTemperature" min-width="200">
+      <el-table-column
+        v-if="active !== 'mqtt'"
+        label="目标室温"
+        prop="roomTemperature"
+        min-width="200"
+      >
         <template #default="{ row }">
           <div class="table-edit-wrapper">
             <el-input v-model="row.roomTemperature" />
@@ -320,16 +327,153 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column v-if="active === 'udp'" label="温度补偿模式" prop="temperatureCompensationMode" width="160" />
-      <el-table-column v-if="active === 'udp'" label="补偿设定时间1" prop="compensationTime1" width="160" />
-      <el-table-column v-if="active === 'udp'" label="补偿设定时间2" prop="compensationTime2" width="160" />
-      <el-table-column v-if="active === 'udp'" label="补偿设定时间3" prop="compensationTime3" width="160" />
-      <el-table-column v-if="active === 'udp'" label="补偿设定功率1" prop="compensationWatt1" width="160" />
-      <el-table-column v-if="active === 'udp'" label="供热模式有效性标志" prop="modeValidFlag" width="160">
-        <template #default="{ row }">
-          <span>{{ row.modeValidFlag === 1 ? '有效' : row.modeValidFlag === 0 ? '无效' : '' }}</span>
-        </template>
-      </el-table-column>
+      <template v-if="active === 'udp'">
+        <el-table-column
+          label="温度补偿模式"
+          prop="temperatureCompensationMode"
+          min-width="200"
+        >
+          <template #default="{ row }">
+            <div class="table-edit-wrapper">
+              <el-input v-model="row.temperatureCompensationMode" />
+              <el-icon
+                @click="
+                  onTableClick(
+                    row,
+                    'temperatureCompensationMode',
+                    1,
+                    'data',
+                    -32
+                  )
+                "
+              >
+                <check color="#409EFF" />
+              </el-icon>
+              <el-icon
+                @click="
+                  onTableClick(row, 'temperatureCompensationMode', 0, '', -32)
+                "
+              >
+                <refresh color="#409EFF" />
+              </el-icon>
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column
+          label="补偿设定时间1"
+          prop="compensationTime1"
+          min-width="200"
+        >
+          <template #default="{ row }">
+            <div class="table-edit-wrapper">
+              <el-input v-model="row.compensationTime1" />
+              <el-icon
+                @click="onTableClick(row, 'compensationTime1', 1, 'data', -31)"
+              >
+                <check color="#409EFF" />
+              </el-icon>
+              <el-icon
+                @click="onTableClick(row, 'compensationTime1', 0, '', -31)"
+              >
+                <refresh color="#409EFF" />
+              </el-icon>
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column
+          label="补偿设定时间2"
+          prop="compensationTime2"
+          min-width="200"
+        >
+          <template #default="{ row }">
+            <div class="table-edit-wrapper">
+              <el-input v-model="row.compensationTime2" />
+              <el-icon
+                @click="onTableClick(row, 'compensationTime2', 1, 'data', -30)"
+              >
+                <check color="#409EFF" />
+              </el-icon>
+              <el-icon
+                @click="onTableClick(row, 'compensationTime2', 0, '', -30)"
+              >
+                <refresh color="#409EFF" />
+              </el-icon>
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column
+          label="补偿设定时间3"
+          prop="compensationTime3"
+          min-width="200"
+        >
+          <template #default="{ row }">
+            <div class="table-edit-wrapper">
+              <el-input v-model="row.compensationTime3" />
+              <el-icon
+                @click="onTableClick(row, 'compensationTime3', 1, 'data', -29)"
+              >
+                <check color="#409EFF" />
+              </el-icon>
+              <el-icon
+                @click="onTableClick(row, 'compensationTime3', 0, '', -29)"
+              >
+                <refresh color="#409EFF" />
+              </el-icon>
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column
+          label="补偿设定功率1"
+          prop="compensationWatt1"
+          min-width="200"
+        >
+          <template #default="{ row }">
+            <div class="table-edit-wrapper">
+              <el-input v-model="row.compensationWatt1" />
+              <el-icon
+                @click="onTableClick(row, 'compensationWatt1', 1, 'data', -28)"
+              >
+                <check color="#409EFF" />
+              </el-icon>
+              <el-icon
+                @click="onTableClick(row, 'compensationWatt1', 0, '', -28)"
+              >
+                <refresh color="#409EFF" />
+              </el-icon>
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column
+          label="供热模式有效性标志"
+          prop="modeValidFlag"
+          min-width="200"
+        >
+          <template #default="{ row }">
+            <div class="table-edit-wrapper">
+              <el-select
+                v-model="row.modeValidFlag"
+                filterable
+                placeholder="请选择"
+              >
+                <el-option
+                  v-for="item of modeValidFlagList"
+                  :label="item.name"
+                  :key="item.value"
+                  :value="item.value"
+                />
+              </el-select>
+              <el-icon
+                @click="onTableClick(row, 'modeValidFlag', 1, 'data', -27)"
+              >
+                <check color="#409EFF" />
+              </el-icon>
+              <el-icon @click="onTableClick(row, 'modeValidFlag', 0, '', -27)">
+                <refresh color="#409EFF" />
+              </el-icon>
+            </div>
+          </template>
+        </el-table-column>
+      </template>
       <el-table-column label="创建时间" prop="createTime" width="160" />
       <el-table-column label="更新时间" prop="updateTime" width="160" />
       <el-table-column
@@ -380,8 +524,8 @@
     />
 
     <!-- 分配角色数据权限对话框 -->
-    <el-dialog :title="title" v-model="visible" width="500px" append-to-body>
-      <el-form ref="operateRef" :model="form" :rules="rules" label-width="96px">
+    <el-dialog class="operate-dialog-form" :title="title" v-model="visible" width="560px">
+      <el-form ref="operateRef" :model="form" :rules="rules" label-width="140px">
         <el-form-item label="设备序列号" prop="deviceSn">
           <el-input v-model="form.deviceSn" />
         </el-form-item>
@@ -434,7 +578,11 @@
         <el-form-item label="数据采集间隔" prop="collectPeriod">
           <el-input v-model="form.collectPeriod" placeholder="请输入" />
         </el-form-item>
-        <el-form-item v-if="active !== 'udp'" label="阀门开度" prop="valvePosition">
+        <el-form-item
+          v-if="active !== 'udp'"
+          label="阀门开度"
+          prop="valvePosition"
+        >
           <el-input v-model="form.valvePosition" placeholder="请输入" />
         </el-form-item>
         <el-form-item label="目标回水温度" prop="returnWaterTemperature">
@@ -443,9 +591,47 @@
             placeholder="请输入"
           />
         </el-form-item>
-        <el-form-item v-if="active !== 'mqtt'" label="目标室温" prop="roomTemperature">
+        <el-form-item
+          v-if="active !== 'mqtt'"
+          label="目标室温"
+          prop="roomTemperature"
+        >
           <el-input v-model="form.roomTemperature" placeholder="请输入" />
         </el-form-item>
+        <template v-if="active === 'udp'">
+          <el-form-item label="温度补偿模式" prop="temperatureCompensationMode">
+            <el-input
+              v-model="form.temperatureCompensationMode"
+              placeholder="请输入"
+            />
+          </el-form-item>
+          <el-form-item label="补偿设定时间1" prop="compensationTime1">
+            <el-input v-model="form.compensationTime1" placeholder="请输入" />
+          </el-form-item>
+          <el-form-item label="补偿设定时间2" prop="compensationTime2">
+            <el-input v-model="form.compensationTime2" placeholder="请输入" />
+          </el-form-item>
+          <el-form-item label="补偿设定时间3" prop="compensationTime3">
+            <el-input v-model="form.compensationTime3" placeholder="请输入" />
+          </el-form-item>
+          <el-form-item label="补偿设定功率1" prop="compensationWatt1">
+            <el-input v-model="form.compensationWatt1" placeholder="请输入" />
+          </el-form-item>
+          <el-form-item label="供热模式有效性标志" prop="modeValidFlag">
+            <el-select
+              v-model="form.modeValidFlag"
+              filterable
+              placeholder="请选择"
+            >
+              <el-option
+                v-for="item of modeValidFlagList"
+                :label="item.name"
+                :key="item.value"
+                :value="item.value"
+              />
+            </el-select>
+          </el-form-item>
+        </template>
       </el-form>
       <template #footer>
         <div class="dialog-footer">
@@ -460,7 +646,7 @@
       </template>
     </el-dialog>
 
-    <el-dialog title="批量下发" v-model="issueVisible" width="500px">
+    <el-dialog title="批量下发" v-model="issueVisible" width="560px">
       <div
         class="input-wrapper-item"
         v-for="item of isFilterVailds"
@@ -517,13 +703,21 @@ const deviceTypeENUM = useAppStore().$state.deviceTypeENUM
 const { proxy } = getCurrentInstance()
 
 const commuityList = ref([])
-watch(() => props.commuity, (newValue) => {
-  commuityList.value = newValue
-}, { deep: true, immediate: true })
+watch(
+  () => props.commuity,
+  (newValue) => {
+    commuityList.value = newValue
+  },
+  { deep: true, immediate: true }
+)
 const active = ref('')
-watch(() => props.active, (newValue) => {
-  active.value = newValue
-}, { deep: true, immediate: true })
+watch(
+  () => props.active,
+  (newValue) => {
+    active.value = newValue
+  },
+  { deep: true, immediate: true }
+)
 
 const deviceList = ref([])
 const loading = ref(true)
@@ -534,14 +728,16 @@ const dialogLoading = ref(false)
 const visible = ref(false)
 
 const deviceTypeList = computed(() => {
-  return Object.keys(deviceTypeENUM).map((item) => ({
-    name: deviceTypeENUM[item],
-    value: item,
-    id: item
-  })).filter(item => {
-    if (active.value === 'udp') return item.value === '30'
-    return item.value !== '30'
-  })
+  return Object.keys(deviceTypeENUM)
+    .map((item) => ({
+      name: deviceTypeENUM[item],
+      value: item,
+      id: item
+    }))
+    .filter((item) => {
+      if (active.value === 'udp') return item.value === '30'
+      return item.value !== '30'
+    })
 })
 const deviceTypeTableDesc = computed(() => (type) => deviceTypeENUM[type])
 const abnormalTypeTableDesc = computed(() => (type) => {
@@ -639,7 +835,13 @@ function handleUpdate(row) {
     collectPeriod: row.collectPeriod,
     valvePosition: row.valvePosition,
     returnWaterTemperature: row.returnWaterTemperature,
-    roomTemperature: row.roomTemperature
+    roomTemperature: row.roomTemperature,
+    temperatureCompensationMode: row.temperatureCompensationMode,
+    compensationTime1: row.compensationTime1,
+    compensationTime2: row.compensationTime2,
+    compensationTime3: row.compensationTime3,
+    compensationWatt1: row.compensationWatt1,
+    modeValidFlag: row.modeValidFlag
   }
   title.value = '修改'
   visible.value = true
@@ -657,7 +859,6 @@ async function handleRefresh(rows = []) {
     getList()
   }
 }
-
 
 /** 刷新 */
 async function handleRefreshCache(rows = []) {
@@ -727,13 +928,22 @@ function reset() {
     collectPeriod: undefined,
     valvePosition: undefined,
     returnWaterTemperature: undefined,
-    roomTemperature: undefined
+    roomTemperature: undefined,
+    temperatureCompensationMode: undefined,
+    compensationTime1: undefined,
+    compensationTime2: undefined,
+    compensationTime3: undefined,
+    compensationWatt1: undefined,
+    modeValidFlag: undefined
   }
   proxy.resetForm('operateRef')
 }
 
 const onTableClick = async (row, key, readWriteFlag, params, cmdCode) => {
-  if (!row[key] && readWriteFlag == 1) {
+  if (
+    (row[key] === undefined || row[key] === '' || row[key] === null) &&
+    readWriteFlag == 1
+  ) {
     return proxy.$modal.msgWarning('请输入值再操作！')
   }
   const postValue = {
@@ -804,7 +1014,47 @@ const issueValueList = ref([
     prop: 'roomTemperature',
     roomTemperature: '',
     cmdCode: 50
+  },
+  {
+    label: '温度补偿模式',
+    prop: 'temperatureCompensationMode',
+    roomTemperature: '',
+    cmdCode: -32
+  },
+  {
+    label: '补偿设定时间1',
+    prop: 'compensationTime1',
+    roomTemperature: '',
+    cmdCode: -31
+  },
+  {
+    label: '补偿设定时间2',
+    prop: 'compensationTime2',
+    roomTemperature: '',
+    cmdCode: -30
+  },
+  {
+    label: '补偿设定时间3',
+    prop: 'compensationTime3',
+    roomTemperature: '',
+    cmdCode: -29
+  },
+  {
+    label: '补偿设定功率1',
+    prop: 'compensationWatt1',
+    roomTemperature: '',
+    cmdCode: -28
+  },
+  {
+    label: '供热模式有效性标志',
+    prop: 'modeValidFlag',
+    roomTemperature: '',
+    cmdCode: -27
   }
+])
+const modeValidFlagList = ref([
+  { value: 0, name: '无效' },
+  { value: 1, name: '有效' }
 ])
 const isFilterVailds = ref([])
 const handleIssue = () => {
@@ -818,9 +1068,22 @@ const handleIssue = () => {
     }
   })
   if (active.value === 'mqtt') {
-    isFilterVailds.value = issueValueList.value.filter(item => item.prop !== 'roomTemperature')
+    isFilterVailds.value = issueValueList.value.filter(
+      (item) =>
+        ![
+          'roomTemperature',
+          'temperatureCompensationMode',
+          'compensationTime1',
+          'compensationTime2',
+          'compensationTime3',
+          'compensationWatt1',
+          'modeValidFlag'
+        ].includes(item.prop)
+    )
   } else {
-    isFilterVailds.value = issueValueList.value.filter(item => item.prop !== 'valvePosition')
+    isFilterVailds.value = issueValueList.value.filter(
+      (item) => item.prop !== 'valvePosition'
+    )
   }
 }
 const issueClick = async (item) => {
@@ -848,7 +1111,9 @@ const issueClick = async (item) => {
 }
 
 const importRef = ref(null)
-const importUrl = computed(() => import.meta.env.VITE_APP_BASE_API + '/biz/device/import')
+const importUrl = computed(
+  () => import.meta.env.VITE_APP_BASE_API + '/biz/device/import'
+)
 const handleImport = () => {
   if (importRef.value) {
     importRef.value.show()
@@ -880,7 +1145,6 @@ onMounted(() => {
       margin-bottom: 0;
       margin-right: 2px;
 
-
       &:first-child {
         width: 100%;
       }
@@ -895,6 +1159,13 @@ onMounted(() => {
     }
   }
 
+  .operate-dialog-form {
+    .el-form {
+      max-height: 600px !important;
+      overflow-y: auto;
+    }
+  }
+
   .input-wrapper-item {
     display: flex;
     align-items: center;
@@ -902,7 +1173,7 @@ onMounted(() => {
 
     .item-label {
       text-align: right;
-      width: 90px;
+      width: 128px;
       font-size: 14px;
       color: #0b1019;
     }
