@@ -497,7 +497,7 @@
         class-name="small-padding fixed-width"
       >
         <template #default="scope">
-          <el-tooltip content="修改" placement="top">
+          <el-tooltip content="修改云端数据" placement="top">
             <el-button
               link
               type="primary"
