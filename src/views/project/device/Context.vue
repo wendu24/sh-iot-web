@@ -1143,7 +1143,7 @@ const handleIssue = () => {
   }
 }
 const issueClick = async (item) => {
-  if (!item[item.prop]) {
+  if (item[item.prop] === undefined || item[item.prop] === '' || item[item.prop] === null) {
     return proxy.$modal.msgWarning('请输入值再操作！')
   }
   const list = multipleSelect.value.map((params) => {
