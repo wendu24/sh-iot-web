@@ -14,7 +14,7 @@ const useAppStore = defineStore(
       deviceTypeENUM: {
         10: "DTU设备",
         20: "阀门",
-        30: "测温模板",
+        30: "测温面板",
         40: "压力传感器",
       }
     }),
