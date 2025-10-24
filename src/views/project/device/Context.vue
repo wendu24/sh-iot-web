@@ -335,7 +335,18 @@
         >
           <template #default="{ row }">
             <div class="table-edit-wrapper">
-              <el-input v-model="row.temperatureCompensationMode" />
+              <el-select
+                v-model="row.temperatureCompensationMode"
+                filterable
+                placeholder="请选择"
+              >
+                <el-option
+                  v-for="item of temperatureCompensationModeList"
+                  :label="item.name"
+                  :key="item.value"
+                  :value="item.value"
+                />
+              </el-select>
               <el-icon
                 @click="
                   onTableClick(
@@ -600,10 +611,18 @@
         </el-form-item>
         <template v-if="active === 'udp'">
           <el-form-item label="温度补偿模式" prop="temperatureCompensationMode">
-            <el-input
-              v-model="form.temperatureCompensationMode"
-              placeholder="请输入"
-            />
+            <el-select
+                v-model="form.temperatureCompensationMode"
+                filterable
+                placeholder="请选择"
+              >
+                <el-option
+                  v-for="item of temperatureCompensationModeList"
+                  :label="item.name"
+                  :key="item.value"
+                  :value="item.value"
+                />
+              </el-select>
           </el-form-item>
           <el-form-item label="补偿设定时间1" prop="compensationTime1">
             <el-input v-model="form.compensationTime1" placeholder="请输入" />
@@ -653,11 +672,28 @@
         :key="item.cmdCode"
       >
         <span class="item-label">{{ item.label }}</span>
-        <el-input
-          class="item-input"
-          v-model="item[item.prop]"
-          placeholder="请输入"
-        />
+        <template v-if="item.prop === 'modeValidFlag' || item.prop === 'temperatureCompensationMode'">
+          <el-select
+            v-model="item[item.prop]"
+            class="item-input"
+            filterable
+            placeholder="请选择"
+          >
+            <el-option
+              v-for="item of selectValidList(item.prop)"
+              :label="item.name"
+              :key="item.value"
+              :value="item.value"
+            />
+          </el-select>
+        </template>
+        <template v-else>
+          <el-input
+            class="item-input"
+            v-model="item[item.prop]"
+            placeholder="请输入"
+          />
+        </template>
         <el-icon class="item-icon" @click="issueClick(item)">
           <check color="#409EFF" />
         </el-icon>
@@ -1052,10 +1088,21 @@ const issueValueList = ref([
     cmdCode: -27
   }
 ])
+const temperatureCompensationModeList = ref([
+  { value: 0, name: '无补偿' },
+  { value: 1, name: '超过[设定功率1]' },
+  { value: 2, name: '超过[设定功率2]' },
+])
 const modeValidFlagList = ref([
   { value: 0, name: '无效' },
   { value: 1, name: '有效' }
 ])
+
+const selectValidList = computed(() => (prop) => {
+  if (prop === 'temperatureCompensationMode') return temperatureCompensationModeList.value
+  return modeValidFlagList.value
+})
+
 const isFilterVailds = ref([])
 const handleIssue = () => {
   if (multipleSelect.value.length === 0)
