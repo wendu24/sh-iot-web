@@ -1093,8 +1093,8 @@ const issueValueList = ref([
 ])
 const temperatureCompensationModeList = ref([
   { value: 0, name: '无补偿' },
-  { value: 1, name: '超过[设定功率1]' },
-  { value: 2, name: '超过[设定功率2]' },
+  { value: 1, name: '保持上传无负载时温度' },
+  { value: 2, name: '启用温度升降的功率补偿' },
 ])
 const modeValidFlagList = ref([
   { value: 0, name: '无效' },
@@ -1132,7 +1132,13 @@ const handleIssue = () => {
     )
   } else {
     isFilterVailds.value = issueValueList.value.filter(
-      (item) => item.prop !== 'valvePosition'
+      // (item) => item.prop !== 'valvePosition' 
+      (item) =>
+        ![
+          'valvePosition',
+          'roomTemperature',
+          'returnWaterTemperature'
+        ].includes(item.prop)
     )
   }
 }
