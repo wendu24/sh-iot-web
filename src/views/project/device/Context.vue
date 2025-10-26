@@ -96,7 +96,7 @@
           <template v-if="row.deviceType === 30">
             <el-form label-position="left" inline class="demo-table-expand">
               <el-form-item label="数据采集时间">
-                <span>{{ informations[row.id]?.collectionTime }}</span>
+                <span>{{ informations[row.id]?.collectTime }}</span>
               </el-form-item>
               <el-form-item label="设备版本">
                 <span>{{ informations[row.id]?.deviceVersion }}</span>

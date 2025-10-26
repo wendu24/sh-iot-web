@@ -10,7 +10,10 @@
         :show-overflow-tooltip="true"
         min-width="150"
       />
+      <el-table-column label="采集时间" prop="collectionTime" width="160" />
+
       <el-table-column label="设备版本" prop="deviceVersion" width="100" />
+
       <el-table-column
         label="异常"
         prop="abnormalTypes"
@@ -24,7 +27,6 @@
       <el-table-column label="电池电量" prop="batteryLevel" width="100" />
       <el-table-column label="上报周期" prop="reportPeriod" width="100" />
       <el-table-column label="信号强度" prop="signalStrength" width="100" />
-      <el-table-column label="采集时间" prop="collectTime" width="160" />
       <el-table-column
         label="阀门开度"
         prop="valvePosition"
